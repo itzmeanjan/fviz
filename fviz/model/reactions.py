@@ -17,6 +17,16 @@ class Reactions:
     def __init__(self, reactions: List[ReactedContent]):
         self._reactions = reactions
 
+    def getReactionByIndex(self, index: int) -> ReactedContent:
+        '''
+            Returns ReactedContent object, looked up by
+            index of that content in reaction set  
+        '''
+        if not (index >= 0 and index < self.count):
+            return None
+
+        return self._reactions[index]
+
     @property
     def count(self) -> int:
         '''
