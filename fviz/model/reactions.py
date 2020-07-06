@@ -1,10 +1,11 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from datetime import datetime
 from os.path import exists
 from json import load
+from functools import reduce
 from .reactedContent import ReactedContent
 
 
@@ -23,6 +24,27 @@ class Reactions:
             All reactions present under this object
         '''
         return self._reactions
+
+    @property
+    def groupByPeers(self) -> Dict[str, List[int]]:
+        '''
+            Groups all rections by peer name i.e. whose content is
+            reacted to, on which ReactedContent instance
+
+            Returns a mapping from peer name to list of ReactedContent indices
+        '''
+        buffer = {}
+
+        for i, j in enumerate(self.reactions):
+            _peer = j.peer
+
+            if _peer not in buffer:
+                buffer[_peer] = [i]
+                continue
+
+            buffer[_peer].append(i)
+
+        return buffer
 
     def getReactionByIndex(self, index: int) -> ReactedContent:
         '''
