@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List
+from typing import List, Tuple
+from datetime import datetime
 from os.path import exists
 from json import load
 from .reactedContent import ReactedContent
@@ -15,6 +16,22 @@ class Reactions:
 
     def __init__(self, reactions: List[ReactedContent]):
         self._reactions = reactions
+
+    @property
+    def count(self) -> int:
+        '''
+            Number of all reactions by actor
+        '''
+        return len(self._reactions)
+
+    @property
+    def getTimeFrame(self) -> Tuple[datetime, datetime]:
+        '''
+            Timeframe of all reactions present in data set, i.e.
+            returns a 2-element tuple of datetimes, where first one
+            is starting point & another one is ending point
+        '''
+        return self._reactions[self.count - 1].time, self._reactions[0].time
 
     @staticmethod
     def fromJSON(src: str) -> Reactions:
