@@ -66,6 +66,26 @@ class Reactions:
 
         return buffer
 
+    def reactionTypeToCount(self) -> Dict[str, int]:
+        '''
+            Maps reaction types to their corresponding count
+
+            Sum of all counts needs to be strictly equal to
+            total number of ReactedContent present under this object
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _reaction = i.reaction
+
+            if _reaction not in buffer:
+                buffer[_reaction] = 1
+                continue
+
+            buffer[_reaction] += 1
+
+        return buffer
+
     def getReactionByIndex(self, index: int) -> ReactedContent:
         '''
             Returns ReactedContent object, looked up by
