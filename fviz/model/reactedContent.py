@@ -43,9 +43,9 @@ class ReactedContent:
             post/ comment/ photo liked by actor
         '''
         if self.reaction == 'LIKE':
-            regex = regCompile(r'(likes\s(.+)\'s)')
+            regex = regCompile(r'(likes\s(.+)\'s)', flags=regI)
         else:
-            regex = regCompile(r'(reacted\sto\s(.+)\'s)')
+            regex = regCompile(r'(reacted\sto\s(.+)\'s)', flags=regI)
 
         match = regex.search(self.title)
         if not match:

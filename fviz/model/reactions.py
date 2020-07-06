@@ -46,6 +46,26 @@ class Reactions:
 
         return buffer
 
+    @property
+    def groupByReactions(self) -> Dict[str, List[int]]:
+        '''
+            Groups all reactions by their types i.e. HAHA, SAD, LIKE etc
+
+            Returns a mapping from reaction type to list of reacted content's indices
+        '''
+        buffer = {}
+
+        for i, j in enumerate(self.reactions):
+            _reaction = j.reaction
+
+            if _reaction not in buffer:
+                buffer[_reaction] = [i]
+                continue
+
+            buffer[_reaction].append(i)
+
+        return buffer
+
     def getReactionByIndex(self, index: int) -> ReactedContent:
         '''
             Returns ReactedContent object, looked up by
