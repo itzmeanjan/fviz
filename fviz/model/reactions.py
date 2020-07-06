@@ -17,6 +17,13 @@ class Reactions:
     def __init__(self, reactions: List[ReactedContent]):
         self._reactions = reactions
 
+    @property
+    def reactions(self) -> List[ReactedContent]:
+        '''
+            All reactions present under this object
+        '''
+        return self._reactions
+
     def getReactionByIndex(self, index: int) -> ReactedContent:
         '''
             Returns ReactedContent object, looked up by

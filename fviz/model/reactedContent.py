@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 from datetime import datetime
+from re import (
+    compile as regCompile,
+    I as regI
+)
 
 
 class ReactedContent:
@@ -31,6 +35,27 @@ class ReactedContent:
     @property
     def time(self) -> datetime:
         return datetime.fromtimestamp(self._timestamp)
+
+    @property
+    def target(self) -> str:
+        '''
+            Returns target of reaction i.e.
+            on which type of content reaction 
+            was given
+
+            Content types could possibly be, 
+            {comment, post, photo} etc.
+
+            Also includes information where this content
+            was present, in case of groups [ i.e. group name ]
+        '''
+        regex = regCompile(r'(\'s\s(.+))$')
+
+        match = regex.search(self.title)
+        if not match:
+            return None
+
+        return match.group(2)[:-1]
 
 
 if __name__ == '__main__':
