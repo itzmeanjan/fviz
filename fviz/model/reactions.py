@@ -66,6 +66,7 @@ class Reactions:
 
         return buffer
 
+    @property
     def reactionTypeToCount(self) -> Dict[str, int]:
         '''
             Maps reaction types to their corresponding count
@@ -83,6 +84,22 @@ class Reactions:
                 continue
 
             buffer[_reaction] += 1
+
+        return buffer
+
+    @property
+    def reactionTypeToPercentage(self) -> Dict[str, int]:
+        '''
+            Maps reaction types to their corresponding percentage of presence
+
+            Sum of all percentages needs to be equal to
+            100 (approx, cause we're dealing with floats )
+        '''
+        _count = self.count
+        buffer = self.reactionTypeToCount
+
+        for k in buffer:
+            buffer[k] = (buffer[k] * 100) / _count
 
         return buffer
 
