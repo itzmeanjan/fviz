@@ -37,6 +37,23 @@ class ReactedContent:
         return datetime.fromtimestamp(self._timestamp)
 
     @property
+    def peer(self) -> str:
+        '''
+            Returns name of person, whose
+            post/ comment/ photo liked by actor
+        '''
+        if self.reaction == 'LIKE':
+            regex = regCompile(r'(likes\s(.+)\'s)')
+        else:
+            regex = regCompile(r'(reacted\sto\s(.+)\'s)')
+
+        match = regex.search(self.title)
+        if not match:
+            return None
+
+        return match.group(2)
+
+    @property
     def target(self) -> str:
         '''
             Returns target of reaction i.e.
