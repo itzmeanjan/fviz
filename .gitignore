@@ -1,2 +1,5 @@
 facebook-itzmeanjan.zip
 sink/*
+fviz/__pycache__
+fviz/model/__pycache__
+fviz/plot/__pycache__
