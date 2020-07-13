@@ -37,6 +37,8 @@ class Reactions:
 
         for i, j in enumerate(self.reactions):
             _peer = j.peer
+            if not _peer:
+                continue
 
             if _peer not in buffer:
                 buffer[_peer] = [i]
@@ -45,6 +47,15 @@ class Reactions:
             buffer[_peer].append(i)
 
         return buffer
+
+    def getTopXPeerToReactionCount(self, x: int) -> Dict[str, int]:
+        buffer = self.groupByPeers
+
+        if x >= len(buffer):
+            return dict([(k, len(v)) for k, v in buffer.items()])
+
+        return dict([(i, len(buffer[i]))
+                     for i in sorted(buffer.keys(), key=lambda e: len(buffer[e]))[-x:]])
 
     @property
     def groupByReactions(self) -> Dict[str, List[int]]:
@@ -88,7 +99,7 @@ class Reactions:
         return buffer
 
     @property
-    def reactionTypeToPercentage(self) -> Dict[str, int]:
+    def reactionTypeToPercentage(self) -> Dict[str, float]:
         '''
             Maps reaction types to their corresponding percentage of presence
 
