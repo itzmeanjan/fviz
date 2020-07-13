@@ -16,15 +16,42 @@ def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
         return False
 
     try:
-        fig = plt.Figure(figsize=(16, 9), dpi=100)
-
         sns.set(style='darkgrid')
-        sns.barplot(x=list(data.keys()), y=list(data.values()), orient='v')
-        plt.xlabel('Reactions')
-        plt.ylabel('#-of Occurances')
-        plt.title(title)
+        fig = plt.Figure(figsize=(16, 9), dpi=100)
+        sns.barplot(x=list(data.keys()), y=list(
+            data.values()), orient='v', ax=fig.gca())
 
-        plt.savefig(sink, bbox_inches='tight', pad_inches=.5)
+        fig.gca().set_xlabel('Reactions')
+        fig.gca().set_ylabel('#-of Occurances')
+        fig.gca().set_title(title)
+
+        fig.savefig(sink, bbox_inches='tight', pad_inches=.5)
+        plt.close(fig)
+        return True
+    except Exception:
+        return False
+
+
+def plotPeerToReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
+    '''
+        Given a dictionary of data holding top X peer 
+        name along with their corresponding reaction count, 
+        plots that as horizontal bar plot
+    '''
+    if not data:
+        return False
+
+    try:
+        sns.set(style='darkgrid')
+        fig = plt.Figure(figsize=(16, 9), dpi=100)
+        sns.barplot(y=list(data.keys()), x=list(
+            data.values()), orient='h', ax=fig.gca())
+
+        fig.gca().set_ylabel('Peer Name')
+        fig.gca().set_xlabel('#-of Reactions')
+        fig.gca().set_title(title)
+
+        fig.savefig(sink, bbox_inches='tight', pad_inches=.5)
         plt.close(fig)
         return True
     except Exception:
