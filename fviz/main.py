@@ -2,9 +2,24 @@
 
 from __future__ import annotations
 from argparse import ArgumentParser
-from typing import Tuple
-from os.path import exists, abspath
-from .extract import makeDir
+from typing import Tuple, List
+from os.path import exists, abspath, join
+from .extract import (
+    makeDir,
+    extractAll
+)
+from .model.reactions import Reactions
+from .plot.reactions import (
+    plotReactionCount,
+    plotPeerToReactionCount
+)
+
+
+def _calculateSuccess(arr: List[bool]) -> float:
+    '''
+        Calculates percentage of success
+    '''
+    return (arr.count(True) / len(arr)) * 100
 
 
 def _getCMD() -> Tuple[str, str, str]:
@@ -36,6 +51,39 @@ def main():
         src, extractAt, sink = _getCMD()
         if not (src and extractAt and sink):
             raise Exception('Bad CMD args')
+
+        if not extractAll(src, extractAt):
+            raise Exception('Failed to extract zip')
+
+        reactions = Reactions.fromJSON(
+            join(extractAt,
+                 'likes_and_reactions/posts_and_comments.json'))
+
+        _success = [
+            plotReactionCount(
+                reactions.reactionTypeToCount,
+                'Reactions by {} [ {} - {} ]'.format(
+                    reactions.reactions[0].actor,
+                    *[i.strftime('%d %b, %Y') for i in reactions.getTimeFrame]
+                ),
+                join(
+                    sink,
+                    'reactionTypeToCountBy{}.png'.format(
+                        reactions.reactions[0].actor
+                    ))),
+            plotPeerToReactionCount(
+                reactions.getTopXPeerToReactionCount(10),
+                'Top 10 profiles, with mostly reacted post(s) by {} [ {} - {} ]'.format(
+                    reactions.reactions[0].actor,
+                    *[i.strftime('%d %b, %Y') for i in reactions.getTimeFrame]
+                ),
+                join(
+                    sink,
+                    'top10ProfilesWithMostlyReactedPostsBy{}.png'.format(
+                        reactions.reactions[0].actor
+                    )))
+        ]
+        print('[+]Completed with {}% success'.format(_calculateSuccess(_success)))
     except KeyboardInterrupt:
         print('\n[!] Terminated')
     except Exception as e:
