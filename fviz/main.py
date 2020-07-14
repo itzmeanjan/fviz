@@ -13,6 +13,7 @@ from .plot.reactions import (
     plotReactionCount,
     plotPeerToReactionCount
 )
+from time import time
 
 
 def _calculateSuccess(arr: List[bool]) -> float:
@@ -55,6 +56,7 @@ def main():
         if not extractAll(src, extractAt):
             raise Exception('Failed to extract zip')
 
+        _starTm = time()
         reactions = Reactions.fromJSON(
             join(extractAt,
                  'likes_and_reactions/posts_and_comments.json'))
@@ -83,7 +85,9 @@ def main():
                         reactions.reactions[0].actor
                     )))
         ]
-        print('[+]Completed with {}% success'.format(_calculateSuccess(_success)))
+        print('[+]Completed in {} s with {}% success'.format(
+            time() - _starTm,
+            _calculateSuccess(_success)))
     except KeyboardInterrupt:
         print('\n[!] Terminated')
     except Exception as e:
