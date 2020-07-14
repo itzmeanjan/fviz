@@ -61,6 +61,9 @@ def main():
             join(extractAt,
                  'likes_and_reactions/posts_and_comments.json'))
 
+        if not reactions:
+            raise Exception('Failed to parse reactions')
+
         _success = [
             plotReactionCount(
                 reactions.reactionTypeToCount,
@@ -96,3 +99,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+N
