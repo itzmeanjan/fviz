@@ -174,6 +174,20 @@ class Reactions:
         '''
         return set([i.reaction for i in self.reactions])
 
+    def reactionTypeToTimeStamps(self) -> Dict[str, List[datetime]]:
+        '''
+            Groups reactions by their types and 
+            returns a mapping of reaction type to list of timestamps,
+            when those reactions were made ( in chronological fashion )
+        '''
+        buffer = self.groupByReactions
+
+        for _, v in buffer.items():
+            for i, j in enumerate(v):
+                v[i] = self.getReactionByIndex(i).time
+
+        return buffer
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
