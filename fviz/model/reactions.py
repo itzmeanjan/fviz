@@ -174,6 +174,7 @@ class Reactions:
         '''
         return set([i.reaction for i in self.reactions])
 
+    @property
     def reactionTypeToTimeStamps(self) -> Dict[str, List[datetime]]:
         '''
             Groups reactions by their types and 
@@ -184,7 +185,29 @@ class Reactions:
 
         for _, v in buffer.items():
             for i, j in enumerate(v):
-                v[i] = self.getReactionByIndex(i).time
+                v[i] = self.getReactionByIndex(j).time
+
+        return buffer
+
+    @property
+    def dateToReactionTypeAndCount(self) -> Dict[datetime, Dict[str, int]]:
+        '''
+            Groups all reacted contents by their date of occurance
+            and for each of them keeps track of count of different reactions
+            happened on that date
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _dt = i.time.date()
+
+            if _dt not in buffer:
+                buffer[_dt] = {i.reaction: 1}
+            else:
+                if i.reaction not in buffer[_dt]:
+                    buffer[_dt][i.reaction] = 1
+                else:
+                    buffer[_dt][i.reaction] += 1
 
         return buffer
 
