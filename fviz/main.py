@@ -16,6 +16,10 @@ from .plot.reactions import (
 from time import time
 
 
+def _splitAndJoinActorName(name: str) -> str:
+    return '_'.join(name.split())
+
+
 def _calculateSuccess(arr: List[bool]) -> float:
     '''
         Calculates percentage of success
@@ -60,7 +64,7 @@ def main():
         reactions = Reactions.fromJSON(
             join(extractAt,
                  'likes_and_reactions/posts_and_comments.json'))
-        
+
         if not reactions:
             raise Exception('Failed to parse reactions')
 
@@ -74,7 +78,7 @@ def main():
                 join(
                     sink,
                     'reactionTypeToCountBy{}.png'.format(
-                        reactions.reactions[0].actor
+                        _splitAndJoinActorName(reactions.reactions[0].actor)
                     ))),
             plotPeerToReactionCount(
                 reactions.getTopXPeerToReactionCount(10),
@@ -85,7 +89,7 @@ def main():
                 join(
                     sink,
                     'top10ProfilesWithMostlyReactedPostsBy{}.png'.format(
-                        reactions.reactions[0].actor
+                        _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
         print('[+]Completed in {} s with {}% success'.format(
