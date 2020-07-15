@@ -34,7 +34,7 @@ def _getBanner():
     '''
         Prints banner of scipt
     '''
-    print('\x1b[1; 6; 36; 49m[+]fviz v0.1.0 - Facebook data visualiser\x1b[0m\n\n\t\x1b[3; 30; 47m$ fviz `path-to-export-facebook-data.zip` `path-of-zip-extraction`  `path-to-sink-directory`\x1b[0m\n\n[+]Author: Anjan Roy < anjanroy@yandex.com >\n[+]Source: https://github.com/itzmeanjan/fviz ( MIT Licensed )\n')
+    print('\x1b[1;6;36;49m[+]fviz v0.1.0 - Facebook data visualiser\x1b[0m\n\n\t\x1b[3;30;47m$ fviz `path-to-export-facebook-data.zip` `path-for-zip-extraction`  `path-to-sink-directory`\x1b[0m\n\n[+]Author: Anjan Roy < anjanroy@yandex.com >\n[+]Source: https://github.com/itzmeanjan/fviz ( MIT Licensed )\n')
 
 
 def _getCMD() -> Tuple[str, str, str]:
@@ -72,6 +72,7 @@ def main():
         if not extractAll(src, extractAt):
             raise Exception('Failed to extract zip')
 
+        print('[+]Working ...')
         _starTm = time()
         reactions = Reactions.fromJSON(
             join(extractAt,
