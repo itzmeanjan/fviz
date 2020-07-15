@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Set
 from datetime import datetime
 from os.path import exists
 from json import load
@@ -166,6 +166,13 @@ class Reactions:
             )
         except Exception:
             return None
+
+    @property
+    def reactionTypes(self) -> Set[str]:
+        '''
+            Returns available reaction types
+        '''
+        return set([i.reaction for i in self.reactions])
 
 
 if __name__ == '__main__':
