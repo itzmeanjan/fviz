@@ -17,6 +17,9 @@ from time import time
 
 
 def _splitAndJoinActorName(name: str) -> str:
+    '''
+        Splits actor name at whitespaces and joins them by `_`
+    '''
     return '_'.join(name.split())
 
 
@@ -25,6 +28,13 @@ def _calculateSuccess(arr: List[bool]) -> float:
         Calculates percentage of success
     '''
     return (arr.count(True) / len(arr)) * 100
+
+
+def _getBanner():
+    '''
+        Prints banner of scipt
+    '''
+    print('\x1b[1; 6; 36; 49m[+]fviz v0.1.0 - Facebook data visualiser\x1b[0m\n\n\t\x1b[3; 30; 47m$ fviz `path-to-export-facebook-data.zip` `path-of-zip-extraction`  `path-to-sink-directory`\x1b[0m\n\n[+]Author: Anjan Roy < anjanroy@yandex.com >\n[+]Source: https://github.com/itzmeanjan/fviz ( MIT Licensed )\n')
 
 
 def _getCMD() -> Tuple[str, str, str]:
@@ -52,6 +62,8 @@ def _getCMD() -> Tuple[str, str, str]:
 
 
 def main():
+    _getBanner()
+
     try:
         src, extractAt, sink = _getCMD()
         if not (src and extractAt and sink):
