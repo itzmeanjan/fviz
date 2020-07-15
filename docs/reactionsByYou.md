@@ -9,4 +9,3 @@ Trying to understand which facebook reactions you're using more over whole times
 Here's a sample bar plot for this category.
 
 ![reactionsByYou](../plots/reactionTypeToCountByAnjan_Roy.png)
-
