@@ -44,7 +44,7 @@ $ fviz facebook-username.zip sink plots
 
 All these plots to be generated when you invoke *fviz* with proper params.
 - Likes and Reactions
-    - Reactions by You
+    - [Reactions by You](./docs/reactionsByYou.md)
     - Top 10 profiles, whose posts were mostly reacted by You
 
 
