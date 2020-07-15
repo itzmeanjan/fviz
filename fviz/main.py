@@ -60,7 +60,7 @@ def main():
         reactions = Reactions.fromJSON(
             join(extractAt,
                  'likes_and_reactions/posts_and_comments.json'))
-
+        
         if not reactions:
             raise Exception('Failed to parse reactions')
 
@@ -78,7 +78,7 @@ def main():
                     ))),
             plotPeerToReactionCount(
                 reactions.getTopXPeerToReactionCount(10),
-                'Top 10 profiles, with mostly reacted post(s) by {} [ {} - {} ]'.format(
+                'Top 10 profiles, whose posts were mostly reacted by {} [ {} - {} ]'.format(
                     reactions.reactions[0].actor,
                     *[i.strftime('%d %b, %Y') for i in reactions.getTimeFrame]
                 ),
@@ -99,4 +99,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-N
