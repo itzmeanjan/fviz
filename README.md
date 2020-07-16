@@ -1,4 +1,7 @@
 # fviz
+
+![banner](./ss/banner.png)
+
 Facebook Data Visualiser - made with &lt;3
 
 ## vision
