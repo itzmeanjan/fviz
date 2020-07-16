@@ -152,7 +152,7 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
         return False
 
 
-def _prepareWeeklyReactionHeatMap(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
+def _prepareWeeklyReactionHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
     '''
         Groups reactions by their week of happening and builds a 2D array
         holding information on which weekday of which week of which year 
@@ -169,8 +169,15 @@ def _prepareWeeklyReactionHeatMap(reactions: Reactions) -> Tuple[List[List[int]]
     _start, _end = [i.date() for i in reactions.getTimeFrame]
 
     while _start <= _end:
-        _weeks.append(int(_start.strftime('%W'), base=10) + 1)
+        _weeks.append('Week {}, {}'.format(
+            int(_start.strftime('%W'),
+                base=10) + 1,
+            _start.strftime('%Y')))
         _start += timedelta(days=7)
+
+    if 'Week {}, {}'.format(int(_end.strftime('%W'), base=10) + 1, _end.strftime('%Y')) not in _weeks:
+        _weeks.append('Week {}, {}'.format(
+            int(_end.strftime('%W'), base=10) + 1, _end.strftime('%Y')))
 
     _groupedByWeek = reactions.weekToWeekDayAndReactionCount
     _buffer = [[] for i in range(7)]
@@ -185,8 +192,10 @@ def _prepareWeeklyReactionHeatMap(reactions: Reactions) -> Tuple[List[List[int]]
 
 
 def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
+    if not data:
+        return False
+
     try:
-        pass
         return True
     except Exception:
         return False
