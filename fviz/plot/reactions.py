@@ -148,8 +148,47 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
             _end += 365
 
         return True
-    except Exception as e:
-        print(e)
+    except Exception:
+        return False
+
+
+def _prepareWeeklyReactionHeatMap(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
+    '''
+        Groups reactions by their week of happening and builds a 2D array
+        holding information on which weekday of which week of which year 
+        how many reactions were recorded ( tries to capture all reaction type 
+        activities on facebook )
+
+        Along with that also returns a list of possible week names
+        spanning across time frame of dataset, which is going to be
+        used as ticklabels of X axis. 
+
+        For Y axis ticklabels, we'll be using week day names i.e. Sunday, Monday etc.
+    '''
+    _weeks = []
+    _start, _end = [i.date() for i in reactions.getTimeFrame]
+
+    while _start <= _end:
+        _weeks.append(int(_start.strftime('%W'), base=10) + 1)
+        _start += timedelta(days=7)
+
+    _groupedByWeek = reactions.weekToWeekDayAndReactionCount
+    _buffer = [[] for i in range(7)]
+
+    for i in range(7):
+        _tmp = _buffer[i]
+
+        for j in _weeks:
+            _tmp.append(_groupedByWeek.get(j, {}).get(i, 0))
+
+    return _buffer, _weeks, ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+
+def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
+    try:
+        pass
+        return True
+    except Exception:
         return False
 
 
