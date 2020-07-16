@@ -211,6 +211,38 @@ class Reactions:
 
         return buffer
 
+    @property
+    def weekToWeekDayAndReactionCount(self) -> Dict[str, Dict[int, int]]:
+        '''
+            Groups all reactions by week of happening ( where format 
+            will be like `Week {x}, {y}` - where `x` is week number of year `y` )
+            and along side also keeps track of count of all reactions on 7 possible days
+            in each of those weeks
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _dt = i.time.date()
+            _week = 'Week {}, {}'.format(
+                int(_dt.strftime('%W'), base=10) + 1,
+                _dt.strftime('%Y'))
+
+            if _week not in buffer:
+                buffer[_week] = {
+                    int(_dt.strftime('%w'), base=10): 1
+                }
+            else:
+                if int(_dt.strftime('%w'), base=10) not in buffer[_week]:
+                    buffer[_week][int(
+                        _dt.strftime('%w'),
+                        base=10)] = 1
+                else:
+                    buffer[_week][int(
+                        _dt.strftime('%w'),
+                        base=10)] += 1
+
+        return buffer
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')

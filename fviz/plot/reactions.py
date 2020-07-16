@@ -148,8 +148,115 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
             _end += 365
 
         return True
-    except Exception as e:
-        print(e)
+    except Exception:
+        return False
+
+
+def _prepareWeeklyReactionHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
+    '''
+        Groups reactions by their week of happening and builds a 2D array
+        holding information on which weekday of which week of which year 
+        how many reactions were recorded ( tries to capture all reaction type 
+        activities on facebook )
+
+        Along with that also returns a list of possible week names
+        spanning across time frame of dataset, which is going to be
+        used as ticklabels of X axis. 
+
+        For Y axis ticklabels, we'll be using week day names i.e. Sunday, Monday etc.
+    '''
+    _weeks = []
+    _start, _end = [i.date() for i in reactions.getTimeFrame]
+
+    while _start <= _end:
+        _weeks.append('Week {}, {}'.format(
+            int(_start.strftime('%W'),
+                base=10) + 1,
+            _start.strftime('%Y')))
+        _start += timedelta(days=7)
+
+    if 'Week {}, {}'.format(int(_end.strftime('%W'), base=10) + 1, _end.strftime('%Y')) not in _weeks:
+        _weeks.append('Week {}, {}'.format(
+            int(_end.strftime('%W'), base=10) + 1, _end.strftime('%Y')))
+
+    _groupedByWeek = reactions.weekToWeekDayAndReactionCount
+    _buffer = [[] for i in range(7)]
+
+    for i in range(7):
+        _tmp = _buffer[i]
+
+        for j in _weeks:
+            _tmp.append(_groupedByWeek.get(j, {}).get(i, 0))
+
+    return _buffer, _weeks, ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+
+def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Plotting like(s) and reaction(s) on facebook data as github style
+        activity heatmap, where along Y-axis we keep week day names
+        and along X-axis we keep week identifiers. And in cells we put accumulated
+        reaction count that day of that week, considering all reaction types.
+    '''
+    def _stripData(_frm: int, _to: int) -> Tuple[List[List[int]], List[str]]:
+        '''
+            Stripping subset of data from large 2D dataset
+            given start and end index
+        '''
+        return [i[_frm: _to] for i in _buffer], _weeks[_frm: _to]
+
+    if not data:
+        return False
+
+    try:
+        _buffer, _weeks, _weekDays = _prepareWeeklyReactionHeatMapData(data)
+        _start = 0
+        _end = 52
+
+        _fig, _axes = plt.subplots(
+            ceil(len(_weeks) / 52),
+            1,
+            figsize=(60, 4 * (ceil(len(_weeks) / 52) + 15)),
+            dpi=100)
+
+        for i in _axes:
+
+            _tmpBuffer, _tmpWeeks = _stripData(_start, _end)
+
+            sns.heatmap(
+                _tmpBuffer,
+                cmap='YlGnBu',
+                lw=.75,
+                ax=i)
+
+            i.set_xticklabels(
+                _tmpWeeks,
+                rotation=90)
+            i.tick_params(
+                axis='x',
+                which='major',
+                labelsize=6)
+            i.set_yticklabels(
+                _weekDays,
+                rotation=0)
+            i.set_title(
+                '{} [ {} - {} ]'.format(
+                    title,
+                    _tmpWeeks[0],
+                    _tmpWeeks[-1]),
+                pad=12)
+
+            _start = _end
+            _end += 52
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception:
         return False
 
 
