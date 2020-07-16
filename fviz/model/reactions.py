@@ -223,18 +223,21 @@ class Reactions:
 
         for i in self.reactions:
             _dt = i.time.date()
+            _week = 'Week {}, {}'.format(
+                int(_dt.strftime('%W'), base=10) + 1,
+                _dt.strftime('%Y'))
 
-            if _dt.strftime('Week %W, %Y') not in buffer:
-                buffer[_dt.strftime('Week %W, %Y')] = {
+            if _week not in buffer:
+                buffer[_week] = {
                     int(_dt.strftime('%w'), base=10): 1
                 }
             else:
-                if int(_dt.strftime('%w'), base=10) not in buffer[_dt.strftime('Week %W, %Y')]:
-                    buffer[_dt.strftime('Week %W, %Y')][int(
+                if int(_dt.strftime('%w'), base=10) not in buffer[_week]:
+                    buffer[_week][int(
                         _dt.strftime('%w'),
                         base=10)] = 1
                 else:
-                    buffer[_dt.strftime('Week %W, %Y')][int(
+                    buffer[_week][int(
                         _dt.strftime('%w'),
                         base=10)] += 1
 
