@@ -99,46 +99,44 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
         _start = 0
         _end = 365
 
-        fig, _axes = plt.subplots(
-            ceil(len(_dates) / 365),
-            1,
-            figsize=(100, 5 * (ceil(len(_dates) / 365) + 10)),
-            dpi=100)
+        for i in range(ceil(len(_dates) / 365)):
 
-        for i in _axes:
+            fig = plt.Figure(figsize=(100, 2), dpi=100)
 
             _tmpBuffer, _tmpDates = _stripData(_start, _end)
 
             sns.heatmap(
                 _tmpBuffer,
                 cmap='YlGnBu',
-                lw=.5,
-                ax=i)
+                lw=.75,
+                ax=fig.gca())
 
-            i.set_xticklabels(
+            fig.gca().set_xticklabels(
                 [k.strftime('%d %b, %Y') for k in _tmpDates],
                 rotation=90)
-            # i.tick_params(axis='x', which='major', labelsize=6)
-            i.set_yticklabels(
+            fig.gca().tick_params(
+                axis='x',
+                which='major',
+                labelsize=6)
+            fig.gca().set_yticklabels(
                 _reactionTypes,
-                rotation=0
-            )
-            i.set_title(
+                rotation=0)
+            fig.gca().set_title(
                 '{} [ {} - {} ]'.format(
                     title,
-                    *[k.strftime('%d %b, %Y') for k in [_tmpDates[0], _tmpDates[-1]]]
-                )
-            )
+                    *[k.strftime('%d %b, %Y') for k in [_tmpDates[0], _tmpDates[-1]]]),
+                pad=12)
+            fig.gca().set_xlabel('Dates')
+            fig.gca().set_ylabel('Reactions')
+
+            fig.savefig(
+                '{}_{}.svg'.format(sink, i),
+                bbox_inches='tight',
+                pad_inches=.5)
+            plt.close(fig)
 
             _start = _end
             _end += 365
-
-        fig.savefig(
-            sink,
-            bbox_inches='tight',
-            pad_inches=.5
-        )
-        plt.close(fig)
 
         return True
     except Exception as e:
