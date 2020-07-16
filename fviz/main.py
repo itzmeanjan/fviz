@@ -11,7 +11,8 @@ from .extract import (
 from .model.reactions import Reactions
 from .plot.reactions import (
     plotReactionCount,
-    plotPeerToReactionCount
+    plotPeerToReactionCount,
+    plotReactionsOverTimeAsHeatMap
 )
 from time import time
 
@@ -102,6 +103,14 @@ def main():
                 join(
                     sink,
                     'top10ProfilesWithMostlyReactedPostsBy{}.png'.format(
+                        _splitAndJoinActorName(reactions.reactions[0].actor)
+                    ))),
+            plotReactionsOverTimeAsHeatMap(
+                reactions,
+                'Reaction HeatMap by {}'.format(reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'reactionHeatMapBy{}'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
