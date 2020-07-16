@@ -209,14 +209,14 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
         return False
 
     try:
-        _buffer, _weeks, _weekDays = _prepareHeatMapData(data)
+        _buffer, _weeks, _weekDays = _prepareWeeklyReactionHeatMapData(data)
         _start = 0
         _end = 52
 
         _fig, _axes = plt.subplots(
             ceil(len(_weeks) / 52),
             1,
-            figsize=(16, 4 * ceil(len(_weeks) / 52)),
+            figsize=(60, 4 * (ceil(len(_weeks) / 52) + 15)),
             dpi=100)
 
         for i in _axes:
@@ -245,8 +245,6 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
                     _tmpWeeks[0],
                     _tmpWeeks[-1]),
                 pad=12)
-            i.set_xlabel('Weeks')
-            i.set_ylabel('WeekDays')
 
             _start = _end
             _end += 52
