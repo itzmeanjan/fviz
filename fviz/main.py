@@ -12,7 +12,8 @@ from .model.reactions import Reactions
 from .plot.reactions import (
     plotReactionCount,
     plotPeerToReactionCount,
-    plotReactionsOverTimeAsHeatMap
+    plotReactionsOverTimeAsHeatMap,
+    plotWeeklyReactionHeatMap
 )
 from time import time
 
@@ -111,6 +112,15 @@ def main():
                 join(
                     sink,
                     'reactionHeatMapFor{}'.format(
+                        _splitAndJoinActorName(reactions.reactions[0].actor)
+                    ))),
+            plotWeeklyReactionHeatMap(
+                reactions,
+                'Weekly Accumulated Reaction HeatMap for {}'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'weeklyAccumulatedReactionHeatMapFor{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
