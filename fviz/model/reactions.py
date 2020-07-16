@@ -214,8 +214,10 @@ class Reactions:
     @property
     def weekToWeekDayAndReactionCount(self) -> Dict[str, Dict[int, int]]:
         '''
-            Groups all reactions by date of happening
-            and stores count of all reactions of certain date
+            Groups all reactions by week of happening ( where format 
+            will be like `Week {x}, {y}` - where `x` is week number of year `y` )
+            and along side also keeps track of count of all reactions on 7 possible days
+            in each of those weeks
         '''
         buffer = {}
 
