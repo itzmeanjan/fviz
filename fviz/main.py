@@ -107,10 +107,10 @@ def main():
                     ))),
             plotReactionsOverTimeAsHeatMap(
                 reactions,
-                'Reaction HeatMap by {}'.format(reactions.reactions[0].actor),
+                'Reaction HeatMap for {}'.format(reactions.reactions[0].actor),
                 join(
                     sink,
-                    'reactionHeatMapBy{}'.format(
+                    'reactionHeatMapFor{}'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
