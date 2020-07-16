@@ -192,10 +192,71 @@ def _prepareWeeklyReactionHeatMapData(reactions: Reactions) -> Tuple[List[List[i
 
 
 def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Plotting like(s) and reaction(s) on facebook data as github style
+        activity heatmap, where along Y-axis we keep week day names
+        and along X-axis we keep week identifiers. And in cells we put accumulated
+        reaction count that day of that week, considering all reaction types.
+    '''
+    def _stripData(_frm: int, _to: int) -> Tuple[List[List[int]], List[str]]:
+        '''
+            Stripping subset of data from large 2D dataset
+            given start and end index
+        '''
+        return [i[_frm: _to] for i in _buffer], _weeks[_frm: _to]
+
     if not data:
         return False
 
     try:
+        _buffer, _weeks, _weekDays = _prepareHeatMapData(data)
+        _start = 0
+        _end = 52
+
+        _fig, _axes = plt.subplots(
+            ceil(len(_weeks) / 52),
+            1,
+            figsize=(16, 4 * ceil(len(_weeks) / 52)),
+            dpi=100)
+
+        for i in _axes:
+
+            _tmpBuffer, _tmpWeeks = _stripData(_start, _end)
+
+            sns.heatmap(
+                _tmpBuffer,
+                cmap='YlGnBu',
+                lw=.75,
+                ax=i)
+
+            i.set_xticklabels(
+                _tmpWeeks,
+                rotation=90)
+            i.tick_params(
+                axis='x',
+                which='major',
+                labelsize=6)
+            i.set_yticklabels(
+                _weekDays,
+                rotation=0)
+            i.set_title(
+                '{} [ {} - {} ]'.format(
+                    title,
+                    _tmpWeeks[0],
+                    _tmpWeeks[-1]),
+                pad=12)
+            i.set_xlabel('Weeks')
+            i.set_ylabel('WeekDays')
+
+            _start = _end
+            _end += 52
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
         return True
     except Exception:
         return False
