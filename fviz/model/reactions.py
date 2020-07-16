@@ -212,7 +212,7 @@ class Reactions:
         return buffer
 
     @property
-    def dateToAllReactionCount(self) -> Dict[date, int]:
+    def weekToWeekDayAndReactionCount(self) -> Dict[str, Dict[int, int]]:
         '''
             Groups all reactions by date of happening
             and stores count of all reactions of certain date
@@ -222,10 +222,19 @@ class Reactions:
         for i in self.reactions:
             _dt = i.time.date()
 
-            if _dt not in buffer:
-                buffer[_dt] = 1
+            if _dt.strftime('Week %W, %Y') not in buffer:
+                buffer[_dt.strftime('Week %W, %Y')] = {
+                    int(_dt.strftime('%w'), base=10): 1
+                }
             else:
-                buffer[_dt] += 1
+                if int(_dt.strftime('%w'), base=10) not in buffer[_dt.strftime('Week %W, %Y')]:
+                    buffer[_dt.strftime('Week %W, %Y')][int(
+                        _dt.strftime('%w'),
+                        base=10)] = 1
+                else:
+                    buffer[_dt.strftime('Week %W, %Y')][int(
+                        _dt.strftime('%w'),
+                        base=10)] += 1
 
         return buffer
 
