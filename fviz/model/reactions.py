@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import List, Tuple, Dict, Set
-from datetime import datetime
+from datetime import datetime, date
 from os.path import exists
 from json import load
 from functools import reduce
@@ -190,7 +190,7 @@ class Reactions:
         return buffer
 
     @property
-    def dateToReactionTypeAndCount(self) -> Dict[datetime, Dict[str, int]]:
+    def dateToReactionTypeAndCount(self) -> Dict[date, Dict[str, int]]:
         '''
             Groups all reacted contents by their date of occurance
             and for each of them keeps track of count of different reactions
