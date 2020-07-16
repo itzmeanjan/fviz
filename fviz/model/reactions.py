@@ -211,6 +211,24 @@ class Reactions:
 
         return buffer
 
+    @property
+    def dateToAllReactionCount(self) -> Dict[date, int]:
+        '''
+            Groups all reactions by date of happening
+            and stores count of all reactions of certain date
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _dt = i.time.date()
+
+            if _dt not in buffer:
+                buffer[_dt] = 1
+            else:
+                buffer[_dt] += 1
+
+        return buffer
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
