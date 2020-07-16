@@ -88,7 +88,16 @@ def _prepareHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[dat
 
 
 def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Plots user activity as heatmap showing all reactions
+        given by user on facebook posts over time. Each 365 day 
+        time span is plotted in its own figure - generating a new image.
+    '''
     def _stripData(_frm: int, _to: int):
+        '''
+            Stripping subset of data from large 2D dataset
+            given start and end index
+        '''
         return [i[_frm: _to] for i in _buffer], _dates[_frm: _to]
 
     if not data:
