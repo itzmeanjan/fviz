@@ -49,6 +49,7 @@ All these plots to be generated when you invoke *fviz* with proper params.
 - Likes and Reactions
     - [Reactions by You](./docs/reactionsByYou.md)
     - [Top 10 profiles, whose posts were mostly reacted by You](./docs/top10ProfilesWithMostlyReactedPostsByYou.md)
+    - [Detailed Facebook Likes & Reactions HeatMap](./docs/detailedReactionsHeatMap.md)
 
 
 **This section will keep getting populated !!!**
