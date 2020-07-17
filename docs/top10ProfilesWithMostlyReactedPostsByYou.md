@@ -1,4 +1,4 @@
-# Top 10 profiles, whose posts were mostly reacted by You
+# Top 10 Facebook profiles, whose posts were mostly reacted by You
 
 ## purpose
 
