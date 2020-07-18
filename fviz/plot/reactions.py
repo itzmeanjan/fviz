@@ -321,24 +321,38 @@ def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
         _fig, _axes = plt.subplots(
             ceil(len(_x) / 36),
             1,
-            figsize=(16, 28),
+            figsize=(18, 36),
             dpi=100)
 
         _start = 0
         _end = 36
 
         for i in _axes:
+            _tmpX = _x[_start: _end]
+
             sns.barplot(
-                x=_x[_start: _end],
+                x=_tmpX,
                 y=_y[_start: _end],
                 hue=_hue[_start: _end],
+                palette='Blues',
                 ax=i)
+
+            _tmpNames = _names[_start: _end]
+
+            for j, k in enumerate(i.patches):
+                i.text(k.get_x() + k.get_width() / 2,
+                       k.get_y() + k.get_height() * .1 + .1,
+                       _tmpNames[j][:16],
+                       ha='center',
+                       rotation=90,
+                       fontsize=6)
 
             i.set_ylabel('#-of Likes & Reactions')
             i.set_title('{} [ {} - {} ]'.format(
                 title,
-                _x[_start],
-                _x[_end]))
+                _tmpX[0],
+                _tmpX[-1]
+            ))
             _start = _end
             _end += 36
 
