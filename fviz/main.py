@@ -13,7 +13,8 @@ from .plot.reactions import (
     plotReactionCount,
     plotPeerToReactionCount,
     plotReactionsOverTimeAsHeatMap,
-    plotWeeklyReactionHeatMap
+    plotWeeklyReactionHeatMap,
+    plotTopXPeersByMonth
 )
 from time import time
 
@@ -121,6 +122,15 @@ def main():
                 join(
                     sink,
                     'weeklyAccumulatedReactionHeatMapFor{}.svg'.format(
+                        _splitAndJoinActorName(reactions.reactions[0].actor)
+                    ))),
+            plotTopXPeersByMonth(
+                reactions,
+                'Top 3 profiles with highest liked and reacted post by {}'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'top3ProfilesWithMonthlyMostReactedPostsBy{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
