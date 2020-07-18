@@ -3,3 +3,4 @@ sink/*
 fviz/__pycache__
 fviz/model/__pycache__
 fviz/plot/__pycache__
+dist

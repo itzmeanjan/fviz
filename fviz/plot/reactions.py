@@ -7,6 +7,8 @@ import seaborn as sns
 from ..model.reactions import Reactions
 from datetime import date, timedelta
 from math import ceil
+from collections import Counter
+from itertools import chain
 
 
 def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
@@ -37,8 +39,8 @@ def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
 
 def plotPeerToReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
     '''
-        Given a dictionary of data holding top X peer 
-        name along with their corresponding reaction count, 
+        Given a dictionary of data holding top X peer
+        name along with their corresponding reaction count,
         plots that as horizontal bar plot
     '''
     if not data:
@@ -90,7 +92,7 @@ def _prepareHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[dat
 def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bool:
     '''
         Plots user activity as heatmap showing all reactions
-        given by user on facebook posts over time. Each 365 day 
+        given by user on facebook posts over time. Each 365 day
         time span is plotted in its own figure - generating a new image.
     '''
     def _stripData(_frm: int, _to: int):
@@ -155,13 +157,13 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
 def _prepareWeeklyReactionHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
     '''
         Groups reactions by their week of happening and builds a 2D array
-        holding information on which weekday of which week of which year 
-        how many reactions were recorded ( tries to capture all reaction type 
+        holding information on which weekday of which week of which year
+        how many reactions were recorded ( tries to capture all reaction type
         activities on facebook )
 
         Along with that also returns a list of possible week names
         spanning across time frame of dataset, which is going to be
-        used as ticklabels of X axis. 
+        used as ticklabels of X axis.
 
         For Y axis ticklabels, we'll be using week day names i.e. Sunday, Monday etc.
     '''
@@ -248,6 +250,117 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
 
             _start = _end
             _end += 52
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception:
+        return False
+
+
+def _getTopXPeersGroupedByMonth(reactions: Reactions,
+                                x: int = 3) -> Dict[str, List[Tuple[str, int]]]:
+    '''
+        Extracts top X peer names ( whose posts were mostly
+        liked/ reacted by this actor ) with corresponding
+        like and reaction count for each month
+    '''
+
+    def _worker(_month: str):
+        return Counter(filter(
+            lambda e: e,
+            [reactions.getReactionByIndex(i).peer for i in groupedByMonth[_month]])).most_common(x)
+
+    groupedByMonth = reactions.groupByMonth
+    return dict([(k, _worker(k)) for k in groupedByMonth.keys()])
+
+
+def _prepareDataForPlottingGroupedBarChartWithTopXPeers(reactions: Reactions,
+                                                        x: int = 3) -> Tuple[List[str], List[int], List[str], List[str]]:
+    '''
+        Preparing data piece by piece for plotting grouped bar chart
+        showing top X profiles whose posts were mostly liked and
+        reacted in each month over whole time period
+    '''
+    _topXPeers = _getTopXPeersGroupedByMonth(reactions, x=x)
+
+    _months = _topXPeers.keys()
+
+    _x = list(chain.from_iterable([[i]*x for i in _months]))
+
+    _y = list(chain.from_iterable(
+        [[i[-1] for i in _topXPeers[k]] + [0] *
+            (x - len(_topXPeers[k])) for k in _months]
+    ))
+    _hue = list(chain.from_iterable(
+        [['1st', '2nd', '3rd'] for i in range(len(_months))]
+    ))
+
+    _names = list(chain.from_iterable(
+        [[i[0] for i in _topXPeers[k]] + ['NA'] * (x - len(_topXPeers[k]))
+         for k in _months]
+    ))
+
+    return _x, _y, _hue, _names
+
+
+def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Plotting top X profiles whose posts were mostly liked and reacted by
+        this actor over time frame of this data set, per month basis. Here for simplicity
+        keeping X=3.
+    '''
+    if not data:
+        return False
+
+    try:
+        _x, _y, _hue, _names = _prepareDataForPlottingGroupedBarChartWithTopXPeers(
+            data, x=3)
+
+        sns.set(style='darkgrid')
+        _fig, _axes = plt.subplots(
+            ceil(len(_x) / 36),
+            1,
+            figsize=(18, 36),
+            dpi=100)
+
+        _start = 0
+        _end = 36
+
+        for i in _axes:
+            _tmpX = _x[_start: _end]
+
+            sns.barplot(
+                x=_tmpX,
+                y=_y[_start: _end],
+                hue=_hue[_start: _end],
+                palette='Greens',
+                ax=i)
+
+            _tmpNames = _names[_start: _end]
+            _tmpNames = list(chain.from_iterable(
+                zip(*[_tmpNames[j:j+3] for j in range(0, len(_tmpNames), 3)])))
+
+            for j, k in enumerate(i.patches):
+                i.text(k.get_x() + k.get_width() / 2,
+                       k.get_y() + k.get_height() * .2 + .1,
+                       _tmpNames[j][:16],
+                       ha='center',
+                       rotation=90,
+                       fontsize=6)
+
+            i.set_ylabel('#-of Likes & Reactions')
+            i.set_title('{} [ {} - {} ]'.format(
+                title,
+                _tmpX[0],
+                _tmpX[-1]
+            ))
+            _start = _end
+            _end += 36
 
         _fig.savefig(
             sink,
