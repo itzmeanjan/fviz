@@ -288,17 +288,21 @@ def _prepareDataForPlottingGroupedBarChartWithTopXPeers(reactions: Reactions,
     '''
     _topXPeers = _getTopXPeersGroupedByMonth(reactions, x=x)
 
-    _x = list(chain.from_iterable([[i]*x for i in _topXPeers.keys()]))
+    _months = _topXPeers.keys()
+
+    _x = list(chain.from_iterable([[i]*x for i in _months]))
+
     _y = list(chain.from_iterable(
-        [[i[-1] for i in v] + [0] * (x - len(v)) for v in _topXPeers.values()]
+        [[i[-1] for i in _topXPeers[k]] + [0] *
+            (x - len(_topXPeers[k])) for k in _months]
     ))
     _hue = list(chain.from_iterable(
-        [['1st', '2nd', '3rd'] for i in range(len(_topXPeers))]
+        [['1st', '2nd', '3rd'] for i in range(len(_months))]
     ))
 
     _names = list(chain.from_iterable(
-        [[i[0] for i in v] + ['NA'] * (x - len(v))
-         for v in _topXPeers.values()]
+        [[i[0] for i in _topXPeers[k]] + ['NA'] * (x - len(_topXPeers[k]))
+         for k in _months]
     ))
 
     return _x, _y, _hue, _names
@@ -334,14 +338,16 @@ def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
                 x=_tmpX,
                 y=_y[_start: _end],
                 hue=_hue[_start: _end],
-                palette='Blues',
+                palette='Greens',
                 ax=i)
 
             _tmpNames = _names[_start: _end]
+            _tmpNames = list(chain.from_iterable(
+                zip(*[_tmpNames[j:j+3] for j in range(0, len(_tmpNames), 3)])))
 
             for j, k in enumerate(i.patches):
                 i.text(k.get_x() + k.get_width() / 2,
-                       k.get_y() + k.get_height() * .1 + .1,
+                       k.get_y() + k.get_height() * .2 + .1,
                        _tmpNames[j][:16],
                        ha='center',
                        rotation=90,
