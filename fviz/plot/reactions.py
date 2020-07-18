@@ -7,6 +7,7 @@ import seaborn as sns
 from ..model.reactions import Reactions
 from datetime import date, timedelta
 from math import ceil
+from collections import Counter
 
 
 def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
@@ -258,6 +259,23 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
         return True
     except Exception:
         return False
+
+
+def _getTopXPeersGroupedByMonth(reactions: Reactions,
+                                x: int = 3):
+    '''
+        Extracts top X peer names ( whose posts were mostly 
+        liked/ reacted by this actor ) with corresponding 
+        like and reaction count for each month
+    '''
+
+    def _worker(_month: str):
+        return Counter(filter(
+            lambda e: e,
+            [reactions.getReactionByIndex(i).peer for i in groupedByMonth[_month]])).most_common(x)
+
+    groupedByMonth = reactions.groupByMonth
+    return dict([(k, _worker(k)) for k in groupedByMonth.keys()])
 
 
 if __name__ == '__main__':
