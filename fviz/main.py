@@ -130,7 +130,7 @@ def main():
                     reactions.reactions[0].actor),
                 join(
                     sink,
-                    'top3ProfilesWithWeeklyMostReactedPostsBy{}.svg'.format(
+                    'top3ProfilesWithMonthlyMostReactedPostsBy{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     )))
         ]
