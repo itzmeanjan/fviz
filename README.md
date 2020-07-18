@@ -2,7 +2,7 @@
 
 ![banner](./ss/banner.png)
 
-Facebook Data Visualiser - made with &lt;3
+Facebook Data Visualizer - made with &lt;3
 
 ## vision
 
