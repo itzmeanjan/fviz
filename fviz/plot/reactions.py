@@ -8,6 +8,7 @@ from ..model.reactions import Reactions
 from datetime import date, timedelta
 from math import ceil
 from collections import Counter
+from itertools import chain
 
 
 def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
@@ -262,7 +263,7 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
 
 
 def _getTopXPeersGroupedByMonth(reactions: Reactions,
-                                x: int = 3):
+                                x: int = 3) -> Dict[str, List[Tuple[str, int]]]:
     '''
         Extracts top X peer names ( whose posts were mostly 
         liked/ reacted by this actor ) with corresponding 
@@ -276,6 +277,31 @@ def _getTopXPeersGroupedByMonth(reactions: Reactions,
 
     groupedByMonth = reactions.groupByMonth
     return dict([(k, _worker(k)) for k in groupedByMonth.keys()])
+
+
+def _prepareDataForPlottingGroupedBarChartWithTopXPeers(reactions: Reactions,
+                                                        x: int = 3) -> Tuple[List[str], List[int], List[str], List[str]]:
+    '''
+        Preparing data piece by piece for plotting grouped bar chart 
+        showing top X profiles whose posts were mostly liked and 
+        reacted in each month over whole time period
+    '''
+    _topXPeers = _getTopXPeersGroupedByMonth(reactions, x=x)
+
+    _x = list(chain.from_iterable([[i]*x for i in _topXPeers.keys()]))
+    _y = list(chain.from_iterable(
+        [[i[-1] for i in v] + [0] * (x - len(v)) for v in _topXPeers.values()]
+    ))
+    _hue = list(chain.from_iterable(
+        [['1st', '2nd', '3rd'] for i in range(len(_topXPeers))]
+    ))
+
+    _names = list(chain.from_iterable(
+        [[i[0] for i in v] + ['NA'] * (x - len(v))
+         for v in _topXPeers.values()]
+    ))
+
+    return _x, _y, _hue, _names
 
 
 if __name__ == '__main__':
