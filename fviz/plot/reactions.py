@@ -304,5 +304,54 @@ def _prepareDataForPlottingGroupedBarChartWithTopXPeers(reactions: Reactions,
     return _x, _y, _hue, _names
 
 
+def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Plotting top X profiles whose posts were mostly liked and reacted by
+        this actor over time frame of this data set, per month basis. Here for simplicity
+        keeping X=3.
+    '''
+    if not data:
+        return False
+
+    try:
+        _x, _y, _hue, _names = _prepareDataForPlottingGroupedBarChartWithTopXPeers(
+            data, x=3)
+
+        sns.set(style='darkgrid')
+        _fig, _axes = plt.subplots(
+            ceil(len(_x) / 36),
+            1,
+            figsize=(16, 28),
+            dpi=100)
+
+        _start = 0
+        _end = 36
+
+        for i in _axes:
+            sns.barplot(
+                x=_x[_start: _end],
+                y=_y[_start: _end],
+                hue=_hue[_start: _end],
+                ax=i)
+
+            i.set_ylabel('#-of Likes & Reactions')
+            i.set_title('{} [ {} - {} ]'.format(
+                title,
+                _x[_start],
+                _x[_end]))
+            _start = _end
+            _end += 36
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception:
+        return False
+
+
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
