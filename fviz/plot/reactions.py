@@ -39,8 +39,8 @@ def plotReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
 
 def plotPeerToReactionCount(data: Dict[str, int], title: str, sink: str) -> bool:
     '''
-        Given a dictionary of data holding top X peer 
-        name along with their corresponding reaction count, 
+        Given a dictionary of data holding top X peer
+        name along with their corresponding reaction count,
         plots that as horizontal bar plot
     '''
     if not data:
@@ -92,7 +92,7 @@ def _prepareHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[dat
 def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bool:
     '''
         Plots user activity as heatmap showing all reactions
-        given by user on facebook posts over time. Each 365 day 
+        given by user on facebook posts over time. Each 365 day
         time span is plotted in its own figure - generating a new image.
     '''
     def _stripData(_frm: int, _to: int):
@@ -157,13 +157,13 @@ def plotReactionsOverTimeAsHeatMap(data: Reactions, title: str, sink: str) -> bo
 def _prepareWeeklyReactionHeatMapData(reactions: Reactions) -> Tuple[List[List[int]], List[str], List[str]]:
     '''
         Groups reactions by their week of happening and builds a 2D array
-        holding information on which weekday of which week of which year 
-        how many reactions were recorded ( tries to capture all reaction type 
+        holding information on which weekday of which week of which year
+        how many reactions were recorded ( tries to capture all reaction type
         activities on facebook )
 
         Along with that also returns a list of possible week names
         spanning across time frame of dataset, which is going to be
-        used as ticklabels of X axis. 
+        used as ticklabels of X axis.
 
         For Y axis ticklabels, we'll be using week day names i.e. Sunday, Monday etc.
     '''
@@ -265,8 +265,8 @@ def plotWeeklyReactionHeatMap(data: Reactions, title: str, sink: str) -> bool:
 def _getTopXPeersGroupedByMonth(reactions: Reactions,
                                 x: int = 3) -> Dict[str, List[Tuple[str, int]]]:
     '''
-        Extracts top X peer names ( whose posts were mostly 
-        liked/ reacted by this actor ) with corresponding 
+        Extracts top X peer names ( whose posts were mostly
+        liked/ reacted by this actor ) with corresponding
         like and reaction count for each month
     '''
 
@@ -282,8 +282,8 @@ def _getTopXPeersGroupedByMonth(reactions: Reactions,
 def _prepareDataForPlottingGroupedBarChartWithTopXPeers(reactions: Reactions,
                                                         x: int = 3) -> Tuple[List[str], List[int], List[str], List[str]]:
     '''
-        Preparing data piece by piece for plotting grouped bar chart 
-        showing top X profiles whose posts were mostly liked and 
+        Preparing data piece by piece for plotting grouped bar chart
+        showing top X profiles whose posts were mostly liked and
         reacted in each month over whole time period
     '''
     _topXPeers = _getTopXPeersGroupedByMonth(reactions, x=x)
