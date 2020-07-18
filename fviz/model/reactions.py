@@ -243,6 +243,25 @@ class Reactions:
 
         return buffer
 
+    @property
+    def groupByMonth(self) -> Dict[str, List[int]]:
+        '''
+            Groups all reactions into sublists by
+            their month of occurance where month
+            will be of form `%b, %Y`
+        '''
+        buffer = {}
+
+        for i, j in enumerate(self.reactions):
+            _month = j.time.strftime('%b, %Y')
+
+            if _month not in buffer:
+                buffer[_month] = [i]
+            else:
+                buffer[_month].append(i)
+
+        return buffer
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
