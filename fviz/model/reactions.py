@@ -260,7 +260,7 @@ class Reactions:
             else:
                 buffer[_month].append(i)
 
-        return buffer
+        return dict([(k, buffer[k]) for k in reversed(buffer.keys())])
 
 
 if __name__ == '__main__':
