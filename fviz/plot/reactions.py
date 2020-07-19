@@ -397,6 +397,10 @@ def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[str], Li
 
 
 def plotAccumulatedUserActivityInEachMinuteOfDay(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Maps all likes and reactions onto 24 hr span i.e. 1440 minutes of a day
+        and keeps count of them, which is plotted as a line plot
+    '''
     if not data:
         return False
 
