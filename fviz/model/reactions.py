@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import List, Tuple, Dict, Set
-from datetime import datetime, date
+from datetime import datetime, date, time
 from os.path import exists
 from json import load
 from functools import reduce
@@ -261,6 +261,45 @@ class Reactions:
                 buffer[_month].append(i)
 
         return dict([(k, buffer[k]) for k in reversed(buffer.keys())])
+
+    @property
+    def reactedContentTypeToCount(self) -> Dict[str, int]:
+        '''
+            Returns a mapping from reacted content type ( post, photo, comment )
+            to their respective count
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _contentType = i.target
+
+            if _contentType not in buffer:
+                buffer[_contentType] = 1
+            else:
+                buffer[_contentType] += 1
+
+        return buffer
+
+    @property
+    def groupByMinuteInADay(self) -> Dict[time, int]:
+        '''
+            Maps all reactions into 1440 minutes possible in a day.
+
+            Simply dropping date information from timestamp of occurance of event
+            and considering only hour and minute part, keeping track of number of 
+            events happened on that minute over time frame of dataset
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _tm = i.time.time().replace(second=0)
+
+            if _tm not in buffer:
+                buffer[_tm] = 1
+            else:
+                buffer[_tm] += 1
+
+        return buffer
 
 
 if __name__ == '__main__':

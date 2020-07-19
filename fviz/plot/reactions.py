@@ -5,7 +5,7 @@ from typing import Dict, List, Tuple
 from matplotlib import pyplot as plt
 import seaborn as sns
 from ..model.reactions import Reactions
-from datetime import date, timedelta
+from datetime import date, timedelta, time, datetime
 from math import ceil
 from collections import Counter
 from itertools import chain
@@ -370,6 +370,89 @@ def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
 
         return True
     except Exception:
+        return False
+
+
+def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[str], List[int]]:
+    '''
+        Preparing data for plotting line plot showing user activity in minute of day over whole
+        time frame of dataset. Returns 1440 element lengthy two data sets, one for plotting across
+        X axis and another to plotted across Y axis.
+    '''
+    _groupedByMinute = reactions.groupByMinuteInADay
+
+    _x = []
+
+    _start = datetime(2000, 1, 1, 0, 0)
+    _end = datetime(2000, 1, 1, 23, 59)
+
+    while _start <= _end:
+        _x.append(_start.time())
+        _start += timedelta(minutes=1)
+
+    _y = [_groupedByMinute.get(i, 0) for i in _x]
+    _x = ['{:0>2}:{:0>2}'.format(i.hour, i.minute) for i in _x]
+
+    return _x, _y
+
+
+def plotAccumulatedUserActivityInEachMinuteOfDay(data: Reactions, title: str, sink: str) -> bool:
+    '''
+        Maps all likes and reactions onto 24 hr span i.e. 1440 minutes of a day
+        and keeps count of them, which is plotted as a line plot
+    '''
+    if not data:
+        return False
+
+    try:
+        _x, _y = _prepareDataForPlottingLinePlot(data)
+
+        sns.set(style='darkgrid')
+
+        _fig, _axes = plt.subplots(2, 2, figsize=(40, 16), dpi=100)
+        _axes = list(chain.from_iterable(_axes))
+
+        _start = 0
+        _end = 360
+
+        for i in _axes:
+            _tmpX = _x[_start: _end]
+
+            sns.lineplot(
+                x=_tmpX,
+                y=_y[_start: _end],
+                ax=i
+            )
+
+            i.set_xlabel('Time')
+            i.set_ylabel('#-of Likes & Reactions')
+
+            _xticks = []
+            for j, k in enumerate(_tmpX):
+                if k.endswith('00'):
+                    _xticks.append(j)
+
+            i.set_xticks(_xticks)
+            i.set_xticklabels([_tmpX[i] for i in _xticks])
+            # i.tick_params(axis='x', labelrotation=90)
+            i.set_title('{} [ {} - {} ]'.format(
+                title,
+                _tmpX[0],
+                _tmpX[-1]
+            ))
+
+            _start = _end
+            _end += 360
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception as e:
+        print(e)
         return False
 
 
