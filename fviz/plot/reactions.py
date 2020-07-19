@@ -5,7 +5,7 @@ from typing import Dict, List, Tuple
 from matplotlib import pyplot as plt
 import seaborn as sns
 from ..model.reactions import Reactions
-from datetime import date, timedelta
+from datetime import date, timedelta, time, datetime
 from math import ceil
 from collections import Counter
 from itertools import chain
@@ -371,6 +371,28 @@ def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
         return True
     except Exception:
         return False
+
+
+def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[time], List[int]]:
+    '''
+        Preparing data for plotting line plot showing user activity in minute of day over whole
+        time frame of dataset. Returns 1440 element lengthy two data sets, one for plotting across
+        X axis and another to plotted across Y axis.
+    '''
+    _groupedByMinute = reactions.groupByMinuteInADay
+
+    _x = []
+
+    _start = datetime(2000, 1, 1, 0, 0)
+    _end = datetime(2000, 1, 1, 23, 59)
+
+    while _start <= _end:
+        _x.append(_start.time())
+        _start += timedelta(minutes=1)
+
+    _y = [_groupedByMinute.get(i, 0) for i in _x]
+
+    return _x, _y
 
 
 if __name__ == '__main__':
