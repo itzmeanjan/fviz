@@ -262,6 +262,24 @@ class Reactions:
 
         return dict([(k, buffer[k]) for k in reversed(buffer.keys())])
 
+    @property
+    def reactedContentTypeToCount(self) -> Dict[str, int]:
+        '''
+            Returns a mapping from reacted content type ( post, photo, comment )
+            to their respective count
+        '''
+        buffer = {}
+
+        for i in self.reactions:
+            _contentType = i.target
+
+            if _contentType not in buffer:
+                buffer[_contentType] = 1
+            else:
+                buffer[_contentType] += 1
+
+        return buffer
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
