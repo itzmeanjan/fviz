@@ -373,7 +373,7 @@ def plotTopXPeersByMonth(data: Reactions, title: str, sink: str) -> bool:
         return False
 
 
-def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[time], List[int]]:
+def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[str], List[int]]:
     '''
         Preparing data for plotting line plot showing user activity in minute of day over whole
         time frame of dataset. Returns 1440 element lengthy two data sets, one for plotting across
@@ -391,8 +391,65 @@ def _prepareDataForPlottingLinePlot(reactions: Reactions) -> Tuple[List[time], L
         _start += timedelta(minutes=1)
 
     _y = [_groupedByMinute.get(i, 0) for i in _x]
+    _x = ['{:0>2}:{:0>2}'.format(i.hour, i.minute) for i in _x]
 
     return _x, _y
+
+
+def plotAccumulatedUserActivityInEachMinuteOfDay(data: Reactions, title: str, sink: str) -> bool:
+    if not data:
+        return False
+
+    try:
+        _x, _y = _prepareDataForPlottingLinePlot(data)
+
+        sns.set(style='darkgrid')
+
+        _fig, _axes = plt.subplots(2, 2, figsize=(40, 16), dpi=100)
+        _axes = list(chain.from_iterable(_axes))
+
+        _start = 0
+        _end = 360
+
+        for i in _axes:
+            _tmpX = _x[_start: _end]
+
+            sns.lineplot(
+                x=_tmpX,
+                y=_y[_start: _end],
+                ax=i
+            )
+
+            i.set_xlabel('Time')
+            i.set_ylabel('#-of Likes & Reactions')
+
+            _xticks = []
+            for j, k in enumerate(_tmpX):
+                if k.endswith('00'):
+                    _xticks.append(j)
+
+            i.set_xticks(_xticks)
+            i.set_xticklabels([_tmpX[i] for i in _xticks])
+            # i.tick_params(axis='x', labelrotation=90)
+            i.set_title('{} [ {} - {} ]'.format(
+                title,
+                _tmpX[0],
+                _tmpX[-1]
+            ))
+
+            _start = _end
+            _end += 360
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception as e:
+        print(e)
+        return False
 
 
 if __name__ == '__main__':
