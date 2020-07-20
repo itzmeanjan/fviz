@@ -323,6 +323,15 @@ class Reactions:
 
         return buffer
 
+    @property
+    def getMeanTimeDelay(self) -> timedelta:
+        '''
+            Computes mean time delay of all likes/ reactions events
+        '''
+        _buffer = self.getInBetweenDelays
+
+        return reduce(lambda acc, cur: acc + cur, _buffer[1:], _buffer[0]) / len(_buffer)
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
