@@ -342,6 +342,19 @@ class Reactions:
         return _cumsum
 
     @property
+    def getCumSumPercentage(self) -> List[float]:
+        '''
+            Calculate percentage contribution from cum-sum time delays
+        '''
+        _buffer = self.getCumulativeSumOfDelays
+        _percentages = []
+
+        for i in _buffer:
+            _percentages.append(i / _buffer[-1] * 100)
+
+        return _percentages
+
+    @property
     def getMeanTimeDelay(self) -> timedelta:
         '''
             Computes mean time delay of all likes/ reactions events
