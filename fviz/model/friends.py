@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from os.path import exists
 from json import load
+from datetime import datetime
 from .friend import Friend
 
 
@@ -29,6 +30,14 @@ class Friends:
             return None
 
         return self.friends[idx]
+
+    @property
+    def getTimeFrame(self) -> Tuple[datetime, datetime]:
+        '''
+            Starting and ending time stamp of data set
+            i.e. when first and last friends were made
+        '''
+        return self.friends[-1].time, self.friends[0].time
 
     @property
     def monthToFriendCount(self) -> Dict[str, int]:
