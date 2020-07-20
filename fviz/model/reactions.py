@@ -324,6 +324,24 @@ class Reactions:
         return buffer
 
     @property
+    def getCumulativeSumOfDelays(self) -> List[timedelta]:
+        '''
+            Computes cumulative sum of all ascendingly 
+            sorted like/ reaction delays 
+        '''
+        _buffer = sorted(self.getInBetweenDelays)
+        _cumsum = []
+
+        for i, j in enumerate(_buffer):
+
+            if not i:
+                _cumsum.append(j)
+            else:
+                _cumsum.append(j + _cumsum[i-1])
+
+        return _cumsum
+
+    @property
     def getMeanTimeDelay(self) -> timedelta:
         '''
             Computes mean time delay of all likes/ reactions events
