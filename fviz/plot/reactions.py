@@ -451,8 +451,7 @@ def plotAccumulatedUserActivityInEachMinuteOfDay(data: Reactions, title: str, si
         plt.close(_fig)
 
         return True
-    except Exception as e:
-        print(e)
+    except Exception:
         return False
 
 
