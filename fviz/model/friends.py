@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List
+from typing import List, Dict
 from os.path import exists
 from json import load
 from .friend import Friend
@@ -29,6 +29,24 @@ class Friends:
             return None
 
         return self.friends[idx]
+
+    @property
+    def monthToFriendCount(self) -> Dict[str, int]:
+        '''
+            Groups time of becoming friends by month and year of occurance,
+            returning a count of how many friends were made in a certain month
+        '''
+        _buffer = {}
+
+        for i in self.friends:
+            _month = i.time.strftime('%b, %Y')
+
+            if _month not in _buffer:
+                _buffer[_month] = 1
+            else:
+                _buffer[_month] += 1
+
+        return _buffer
 
     @staticmethod
     def fromJSON(src: str) -> Friends:
