@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import List, Tuple, Dict, Set
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from os.path import exists
 from json import load
 from functools import reduce
@@ -298,6 +298,28 @@ class Reactions:
                 buffer[_tm] = 1
             else:
                 buffer[_tm] += 1
+
+        return buffer
+
+    @property
+    def getInBetweenDelays(self) -> List[timedelta]:
+        '''
+            Finds all time delays in between any two consecutive like/ reaction
+            event, and returns it as a list of timedelta(s)
+
+            For N number of like/ reaction events, N-1 number of timedeltas will
+            be there
+        '''
+        buffer = []
+
+        for i in range(1, self.count):
+            _reactionOne, _reactionTwo = self.getReactionByIndex(
+                i-1), self.getReactionByIndex(i)
+
+            if _reactionOne.time > _reactionTwo.time:
+                buffer.append(_reactionOne.time - _reactionTwo.time)
+            else:
+                buffer.append(_reactionTwo.time - _reactionOne.time)
 
         return buffer
 
