@@ -138,7 +138,7 @@ class Reactions:
             returns a 2-element tuple of datetimes, where first one
             is starting point & another one is ending point
         '''
-        return self._reactions[self.count - 1].time, self._reactions[0].time
+        return self._reactions[-1].time, self._reactions[0].time
 
     @staticmethod
     def fromJSON(src: str) -> Reactions:
