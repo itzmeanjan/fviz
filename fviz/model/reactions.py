@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 from typing import List, Tuple, Dict, Set
-from datetime import datetime, date, time
+from datetime import datetime, date, time, timedelta
 from os.path import exists
 from json import load
 from functools import reduce
@@ -138,7 +138,7 @@ class Reactions:
             returns a 2-element tuple of datetimes, where first one
             is starting point & another one is ending point
         '''
-        return self._reactions[self.count - 1].time, self._reactions[0].time
+        return self._reactions[-1].time, self._reactions[0].time
 
     @staticmethod
     def fromJSON(src: str) -> Reactions:
@@ -300,6 +300,81 @@ class Reactions:
                 buffer[_tm] += 1
 
         return buffer
+
+    @property
+    def getInBetweenDelays(self) -> List[timedelta]:
+        '''
+            Finds all time delays in between any two consecutive like/ reaction
+            event, and returns it as a list of timedelta(s)
+
+            For N number of like/ reaction events, N-1 number of timedeltas will
+            be there
+        '''
+        buffer = []
+
+        for i in range(1, self.count):
+            _reactionOne, _reactionTwo = self.getReactionByIndex(
+                i-1), self.getReactionByIndex(i)
+
+            if _reactionOne.time > _reactionTwo.time:
+                buffer.append(_reactionOne.time - _reactionTwo.time)
+            else:
+                buffer.append(_reactionTwo.time - _reactionOne.time)
+
+        return buffer
+
+    @property
+    def getCumulativeSumOfDelays(self) -> List[timedelta]:
+        '''
+            Computes cumulative sum of all ascendingly 
+            sorted like/ reaction delays 
+        '''
+        _buffer = sorted(self.getInBetweenDelays)
+        _cumsum = []
+
+        for i, j in enumerate(_buffer):
+
+            if not i:
+                _cumsum.append(j)
+            else:
+                _cumsum.append(j + _cumsum[i-1])
+
+        return _cumsum
+
+    @property
+    def getCumSumPercentage(self) -> List[float]:
+        '''
+            Calculate percentage contribution from cum-sum time delays
+        '''
+        _buffer = self.getCumulativeSumOfDelays
+        _percentages = []
+
+        for i in _buffer:
+            _percentages.append(i / _buffer[-1] * 100)
+
+        return _percentages
+
+    @property
+    def getMeanTimeDelay(self) -> timedelta:
+        '''
+            Computes mean time delay of all likes/ reactions events
+        '''
+        _buffer = self.getInBetweenDelays
+
+        return reduce(lambda acc, cur: acc + cur, _buffer[1:], _buffer[0]) / len(_buffer)
+
+    @property
+    def getMedianTimeDelay(self) -> timedelta:
+        '''
+            Computes median delay for all like and reaction event
+            for this user
+        '''
+        _buffer = sorted(self.getInBetweenDelays)
+
+        if len(_buffer) % 2 == 0:
+            return (_buffer[(len(_buffer) // 2) - 1] + _buffer[len(_buffer) // 2]) / 2
+        else:
+            return _buffer[len(_buffer) // 2]
 
 
 if __name__ == '__main__':
