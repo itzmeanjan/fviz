@@ -4,6 +4,8 @@
 
 Facebook Data Visualizer - made with &lt;3
 
+**Released v0.4.0 on PyPI**
+
 ## vision
 
 I was interested in understanding my facebook activities overtime. Also I had a knack in checking how much data I'm giving facebook. So, I thought of analysing exported facebook data and understanding what's it saying. 
