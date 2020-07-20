@@ -332,6 +332,19 @@ class Reactions:
 
         return reduce(lambda acc, cur: acc + cur, _buffer[1:], _buffer[0]) / len(_buffer)
 
+    @property
+    def getMedianTimeDelay(self) -> timedelta:
+        '''
+            Computes median delay for all like and reaction event
+            for this user
+        '''
+        _buffer = sorted(self.getInBetweenDelays)
+
+        if len(_buffer) % 2 == 0:
+            return (_buffer[(len(_buffer) // 2) - 1] + _buffer[len(_buffer) // 2]) / 2
+        else:
+            return _buffer[len(_buffer) // 2]
+
 
 if __name__ == '__main__':
     print('It is not supposed to be used this way !')
