@@ -4,7 +4,7 @@
 
 Facebook Data Visualizer - made with &lt;3
 
-**Released v0.4.0 on PyPI**
+**Released v0.5.0 on PyPI**
 
 ## vision
 
@@ -55,6 +55,9 @@ All these plots to be generated when you invoke *fviz* with proper params.
     - [Weekly Accumulated Facebook Likes & Reactions HeatMap](./docs/weeklyAccumulatedReactionsHeatMap.md)
     - [Top 3 Facebook profiles, whose posts were mostly liked & reacted by YOU, _per month_](./docs/top3ProfilesWithMonthlyMostReactedPosts.md)
     - [Accumulated Facebook likes and reactions mapped onto each minute of a Day](./docs/accumulatedAcivityInEachMinuteOfDay.md)
+
+- Friends
+    - [Monthly Facebook Friends Created by YOU](./docs/monthlyFriendingRate.md)
 
 
 **This section will keep getting populated !!!**
