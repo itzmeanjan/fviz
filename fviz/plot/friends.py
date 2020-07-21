@@ -44,12 +44,13 @@ def plotMonthlyFriendsCreated(friends: Friends, title: str, sink: str) -> bool:
 
         _x, _y = _prepareDataForPlottingMonthlyFriendsCreated(friends)
 
-        sns.set(style='darkgrid')
+        sns.set(style="ticks", context="talk")
+        plt.style.use("dark_background")
 
         _fig, _axes = plt.subplots(
             ceil(len(_x)/12),
             1,
-            figsize=(36, ceil(len(_x)/12) * 8),
+            figsize=(40, ceil(len(_x)/12) * 10),
             dpi=100
         )
 

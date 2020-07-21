@@ -156,11 +156,11 @@ def main():
                     ))),
             plotMonthlyFriendsCreated(
                 friends,
-                'Monthly Friending Rate for {}'.format(
+                'Monthly Friending Rate of {}'.format(
                     reactions.reactions[0].actor),
                 join(
                     sink,
-                    'monthlyFriendingRateFor{}.svg'.format(
+                    'monthlyFriendingRateOf{}.svg'.format(
                         _splitAndJoinActorName(
                             reactions.reactions[0].actor)
                     )))
