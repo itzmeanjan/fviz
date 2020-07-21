@@ -7,6 +7,7 @@ from datetime import timedelta
 import seaborn as sns
 from matplotlib import pyplot as plt
 from math import ceil
+from itertools import chain
 
 
 def _prepareDataForPlottingMonthlyFriendsCreated(friends: Friends) -> Tuple[List[str], List[int]]:
@@ -42,7 +43,11 @@ def plotMonthlyFriendsCreated(friends: Friends, title: str, sink: str) -> bool:
         sns.set(style='darkgrid')
 
         _fig, _axes = plt.subplots(
-            ceil(len(_x)/12), 1, figsize=(36, ceil(len(_x)/12) * 8), dpi=100)
+            ceil(len(_x)/12),
+            1,
+            figsize=(36, ceil(len(_x)/12) * 8),
+            dpi=100
+        )
 
         _start = 0
         _end = 12
@@ -58,7 +63,6 @@ def plotMonthlyFriendsCreated(friends: Friends, title: str, sink: str) -> bool:
 
             i.set_xticks(range(len(_tmpX)))
             i.set_xticklabels(_tmpX)
-            i.lines[0].set_linestyle('--')
 
             i.set_xlabel('Time')
             i.set_ylabel('#-of Friends Created')
