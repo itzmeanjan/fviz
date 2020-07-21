@@ -17,6 +17,8 @@ from .plot.reactions import (
     plotTopXPeersByMonth,
     plotAccumulatedUserActivityInEachMinuteOfDay
 )
+from .model.friends import Friends
+from .plot.friends import plotMonthlyFriendsCreated
 from time import time
 
 
@@ -85,6 +87,15 @@ def main():
         if not reactions:
             raise Exception('Failed to parse reactions')
 
+        friends = Friends.fromJSON(
+            join(extractAt,
+                 'friends/friends.json'
+                 )
+        )
+
+        if not friends:
+            raise Exception('Failed to parse friends data')
+
         _success = [
             plotReactionCount(
                 reactions.reactionTypeToCount,
@@ -142,6 +153,16 @@ def main():
                     sink,
                     'accumulatedAcivityInEachMinuteOfDayBy{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
+                    ))),
+            plotMonthlyFriendsCreated(
+                friends,
+                'Monthly Friending Rate of {}'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'monthlyFriendingRateOf{}.svg'.format(
+                        _splitAndJoinActorName(
+                            reactions.reactions[0].actor)
                     )))
         ]
         print('[+]Completed in {} s with {}% success'.format(
