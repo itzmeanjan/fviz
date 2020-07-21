@@ -7,7 +7,6 @@ from datetime import timedelta
 import seaborn as sns
 from matplotlib import pyplot as plt
 from math import ceil
-from itertools import chain
 
 
 def _prepareDataForPlottingMonthlyFriendsCreated(friends: Friends) -> Tuple[List[str], List[int]]:
@@ -33,6 +32,11 @@ def _prepareDataForPlottingMonthlyFriendsCreated(friends: Friends) -> Tuple[List
 
 
 def plotMonthlyFriendsCreated(friends: Friends, title: str, sink: str) -> bool:
+    '''
+        Given friends created and when created data, plots them as
+        friends created per month in form of a line plot, seperating 
+        each year into different axes
+    '''
     if not friends:
         return False
 
