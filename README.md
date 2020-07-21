@@ -4,7 +4,7 @@
 
 Facebook Data Visualizer - made with &lt;3
 
-**Released v0.4.0 on PyPI**
+**Released v0.5.0 on PyPI**
 
 ## vision
 
