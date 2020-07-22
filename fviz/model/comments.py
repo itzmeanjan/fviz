@@ -5,6 +5,7 @@ from typing import List
 from os.path import exists
 from json import load
 from .comment import Comment
+from collections import Counter
 
 
 class Comments:
@@ -32,6 +33,23 @@ class Comments:
         return self._comments[_idx]\
             if _idx >= 0 and _idx < self.count\
             else None
+
+    def topXPeersWhosePostsWereMostlyCommented(self, x: int = 10) -> List[str]:
+        '''
+            Finds top X number of peers, their posts
+            were where this user mostly commented
+
+            Note: This function doesn't consider those
+            comments where it's a reply to another comment i.e.
+            part of a comment based conversation
+        '''
+        buffer = {}
+
+        for i in self.comments:
+            if not i.isConversation:
+                buffer[i.peer] = buffer.get(i.peer, 0) + 1
+
+        return Counter(buffer).most_common(x)
 
     @staticmethod
     def fromJSON(src: str) -> Comments:
