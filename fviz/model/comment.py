@@ -36,8 +36,9 @@ class Comment:
         if not _match:
             return None
         return _match.group(3)[:-2]\
-            if _match.group(3).endswith('\'s')\
-            else _match.group(3)
+            if _match.group(3).endswith('\'s') else\
+            (None if _match.group(3) == 'a'
+             else 'self')
 
     @property
     def contentType(self) -> str:

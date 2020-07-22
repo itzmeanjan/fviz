@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List
+from typing import List, Tuple
 from os.path import exists
 from json import load
 from .comment import Comment
@@ -34,7 +34,7 @@ class Comments:
             if _idx >= 0 and _idx < self.count\
             else None
 
-    def topXPeersWhosePostsWereMostlyCommented(self, x: int = 10) -> List[str]:
+    def topXPeersWhosePostsWereMostlyCommented(self, x: int = 10) -> List[Tuple[str, int]]:
         '''
             Finds top X number of peers, their posts
             were where this user mostly commented
@@ -46,7 +46,7 @@ class Comments:
         buffer = {}
 
         for i in self.comments:
-            if not i.isConversation:
+            if not i.isConversation and i.peer:
                 buffer[i.peer] = buffer.get(i.peer, 0) + 1
 
         return Counter(buffer).most_common(x)
