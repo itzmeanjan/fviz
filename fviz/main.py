@@ -19,6 +19,8 @@ from .plot.reactions import (
 )
 from .model.friends import Friends
 from .plot.friends import plotMonthlyFriendsCreated
+from .model.comments import Comments
+from .plot.comments import plotTopXPeersWithMostCommentedPostsByUser
 from time import time
 
 
@@ -96,6 +98,15 @@ def main():
         if not friends:
             raise Exception('Failed to parse friends data')
 
+        comments = Comments.fromJSON(
+            join(extractAt,
+                 'comments/comments.json'
+                 )
+        )
+
+        if not comments:
+            raise Exception('Failed to parse comments data')
+
         _success = [
             plotReactionCount(
                 reactions.reactionTypeToCount,
@@ -161,6 +172,16 @@ def main():
                 join(
                     sink,
                     'monthlyFriendingRateOf{}.svg'.format(
+                        _splitAndJoinActorName(
+                            reactions.reactions[0].actor)
+                    ))),
+            plotTopXPeersWithMostCommentedPostsByUser(
+                comments,
+                'Top 10 Facebook Profiles, with whom {} mostly interacted in Facebook Comments'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'top10ProfilesWithMostlyCommentedPostsBy{}.svg'.format(
                         _splitAndJoinActorName(
                             reactions.reactions[0].actor)
                     )))
