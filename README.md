@@ -4,7 +4,7 @@
 
 Facebook Data Visualizer - made with &lt;3
 
-**Released v0.5.0 on PyPI**
+**Released v0.6.0 on PyPI**
 
 ## vision
 
@@ -30,13 +30,8 @@ $ python3 -m pip install fviz -U
 ```
 
 - And voila !!!
-- *fviz* is installed at `$HOME/.local/bin`. Add this path to `$PATH` env variable. For so, open `~/.bashrc` and append following line at very bottom. This will make *fviz* available for invokation from any place in your system.
-
-```bash
-export PATH="$PATH:$HOME/.local/bin"
-```
-
-- I'm assuming you've already requestsed facebook for exporting your facebook data, and downloaded so. Time to pass that *.zip* file to *fviz* and get results.
+- Add your default pip installation location to system _PATH_ variable, so that you can invoke _fviz_ from anywhere in system. 
+- I'm assuming you've already requestsed facebook for exporting your facebook data as **JSON**, and downloaded so. Time to pass that *.zip* file to *fviz* and get results.
 
 ```bash
 $ fviz facebook-username.zip sink plots
