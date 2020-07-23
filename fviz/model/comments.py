@@ -1,11 +1,12 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from os.path import exists
 from json import load
 from .comment import Comment
 from collections import Counter
+from datetime import time
 
 
 class Comments:
@@ -77,6 +78,28 @@ class Comments:
                         i.get('data', [])))
 
         return _comments
+
+    @property
+    def groupByWeek(self) -> Dict[str, List[int]]:
+        '''
+            Groups all comments you made by its
+            week of happening where week is specified as
+            `Week %W, %Y`
+        '''
+        buffer = {}
+
+        for i, j in enumerate(self.comments):
+            _dt = j.time.date()
+            _week = 'Week {}, {}'.format(
+                int(_dt.strftime('%W'), base=10) + 1,
+                _dt.strftime('%Y'))
+
+            if _week not in buffer:
+                buffer[_week] = [i]
+            else:
+                buffer[_week].append(i)
+
+        return buffer
 
 
 if __name__ == '__main__':
