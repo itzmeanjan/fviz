@@ -21,14 +21,16 @@ def plotTopXPeersWithMostCommentedPostsByUser(data: Comments, title: str, sink: 
         _x = [i[0] for i in _topXPeers]
         _y = [i[1] for i in _topXPeers]
 
-        sns.set(style='darkgrid')
+        sns.set(style="ticks", context="talk")
+        plt.style.use("dark_background")
+        
         fig = plt.Figure(figsize=(16, 9), dpi=100)
         sns.barplot(x=_y,
                     y=_x,
                     orient='h',
                     ax=fig.gca())
 
-        fig.gca().set_xlabel('#-of Comments')
+        fig.gca().set_xlabel('#-of Involvements')
         fig.gca().set_ylabel('Facebook Profiles')
         fig.gca().set_title(title)
 
