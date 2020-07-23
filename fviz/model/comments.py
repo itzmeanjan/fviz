@@ -34,7 +34,7 @@ class Comments:
             if _idx >= 0 and _idx < self.count\
             else None
 
-    def topXPeersWhosePostsWereMostlyCommented(self, x: int = 10) -> List[Tuple[str, int]]:
+    def topXPeersWithMostInvolvementInComments(self, x: int = 10) -> List[Tuple[str, int]]:
         '''
             Finds top X number of peers, their posts
             were where this user mostly commented
@@ -46,7 +46,7 @@ class Comments:
         buffer = {}
 
         for i in self.comments:
-            if not i.isConversation and i.peer:
+            if i.peer:
                 buffer[i.peer] = buffer.get(i.peer, 0) + 1
 
         return Counter(buffer).most_common(x)
