@@ -16,8 +16,14 @@ def mergeWeeklyFacebookActivites(reactions: Reactions, comments: Comments) -> Di
     '''
     _buffer = deepcopy(reactions.weekToQuarterOfDayAndCount)
 
-    for k, v in comments.weekToQuarterOfDayAndCount:
-        _buffer[k] = _buffer.get(k, 0) + v
+    for k, v in comments.weekToQuarterOfDayAndCount.items():
+        if k not in _buffer:
+            _buffer[k] = v
+        else:
+            _tmp = _buffer[k]
+
+            for _iK, _iV in v.items():
+                _tmp[_iK] = _tmp.get(_iK, 0) + _iV
 
     return _buffer
 
