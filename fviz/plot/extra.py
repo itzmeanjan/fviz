@@ -82,7 +82,7 @@ def plotWeeklyHeatMapWithLikesReactionsComments(reactions: Reactions, comments: 
         _fig, _axes = plt.subplots(
             ceil(len(_x) / 52),
             1,
-            figsize=(160, 4 * (ceil(len(_x) / 52) + 15)),
+            figsize=(185, 4 * (ceil(len(_x) / 52) + 16)),
             dpi=100)
 
         for i in _axes:
@@ -92,7 +92,7 @@ def plotWeeklyHeatMapWithLikesReactionsComments(reactions: Reactions, comments: 
             sns.heatmap(
                 _tmpData,
                 cmap='PuBu',
-                lw=.75,
+                lw=1.0,
                 ax=i)
 
             i.set_xticklabels(
@@ -112,7 +112,7 @@ def plotWeeklyHeatMapWithLikesReactionsComments(reactions: Reactions, comments: 
                     _tmpX[0],
                     _tmpX[-1]),
                 pad=16,
-                fontsize=20)
+                fontsize=30)
 
             _frm = _to
             _to += 52
