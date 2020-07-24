@@ -31,7 +31,7 @@ $ python3 -m pip install fviz -U
 
 - And voila !!!
 - Add your default pip installation location to system _PATH_ variable, so that you can invoke _fviz_ from anywhere in system. 
-- I'm assuming you've already requestsed facebook for exporting your facebook data as **JSON**, and downloaded so. Time to pass that *.zip* file to *fviz* and get results.
+- _You can download your copy of facebook data as **JSON**, by following these [instructions](https://www.facebook.com/help/212802592074644)_. Time to pass that *.zip* file to *fviz* and get results.
 
 ```bash
 $ fviz facebook-username.zip sink plots
