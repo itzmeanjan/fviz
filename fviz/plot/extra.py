@@ -78,50 +78,50 @@ def plotWeeklyHeatMapWithLikesReactionsComments(reactions: Reactions, comments: 
         _frm = 0
         _to = 52
 
-        sns.set()
-        _fig, _axes = plt.subplots(
-            ceil(len(_x) / 52),
-            1,
-            figsize=(185, 4 * (ceil(len(_x) / 52) + 16)),
-            dpi=100)
+        with plt.style.context("classic"):
+            _fig, _axes = plt.subplots(
+                ceil(len(_x) / 52),
+                1,
+                figsize=(185, 4 * (ceil(len(_x) / 52) + 16)),
+                dpi=100)
 
-        for i in _axes:
+            for i in _axes:
 
-            _tmpData, _tmpX = _stripData(_frm, _to)
+                _tmpData, _tmpX = _stripData(_frm, _to)
 
-            sns.heatmap(
-                _tmpData,
-                cmap='PuBu',
-                lw=1.0,
-                ax=i)
+                sns.heatmap(
+                    _tmpData,
+                    cmap='PuBu',
+                    lw=1.0,
+                    ax=i)
 
-            i.set_xticklabels(
-                _tmpX,
-                rotation=90)
-            i.tick_params(
-                axis='x',
-                which='major',
-                labelsize=10)
-            i.set_yticklabels(
-                _y,
-                rotation=0,
-                fontsize=16)
-            i.set_title(
-                '{} [ {} - {} ]'.format(
-                    title,
-                    _tmpX[0],
-                    _tmpX[-1]),
-                pad=16,
-                fontsize=30)
+                i.set_xticklabels(
+                    _tmpX,
+                    rotation=90)
+                i.tick_params(
+                    axis='x',
+                    which='major',
+                    labelsize=10)
+                i.set_yticklabels(
+                    _y,
+                    rotation=0,
+                    fontsize=16)
+                i.set_title(
+                    '{} [ {} - {} ]'.format(
+                        title,
+                        _tmpX[0],
+                        _tmpX[-1]),
+                    pad=16,
+                    fontsize=30)
 
-            _frm = _to
-            _to += 52
+                _frm = _to
+                _to += 52
 
-        _fig.savefig(
-            sink,
-            bbox_inches='tight',
-            pad_inches=.5)
-        plt.close(_fig)
+            _fig.savefig(
+                sink,
+                bbox_inches='tight',
+                pad_inches=.5)
+            plt.close(_fig)
 
         return True
     except Exception as e:

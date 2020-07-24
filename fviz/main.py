@@ -166,6 +166,17 @@ def main():
                     'accumulatedAcivityInEachMinuteOfDayBy{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
                     ))),
+            plotWeeklyHeatMapWithLikesReactionsComments(
+                reactions,
+                comments,
+                'Facebook Activity on each Quarter of Day by {}'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'facebookActivityOnEachQuarterOfDayBy{}.svg'.format(
+                        _splitAndJoinActorName(
+                            reactions.reactions[0].actor)
+                    ))),
             plotMonthlyFriendsCreated(
                 friends,
                 'Monthly Friending Rate of {}'.format(
@@ -183,17 +194,6 @@ def main():
                 join(
                     sink,
                     'top10ProfilesWithMostlyCommentedPostsBy{}.svg'.format(
-                        _splitAndJoinActorName(
-                            reactions.reactions[0].actor)
-                    ))),
-            plotWeeklyHeatMapWithLikesReactionsComments(
-                reactions,
-                comments,
-                'Facebook Activity on each Quarter of Day by {}'.format(
-                    reactions.reactions[0].actor),
-                join(
-                    sink,
-                    'facebookActivityOnEachQuarterOfDayBy{}.svg'.format(
                         _splitAndJoinActorName(
                             reactions.reactions[0].actor)
                     )))
