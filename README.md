@@ -57,5 +57,8 @@ All these plots to be generated when you invoke *fviz* with proper params.
 - Comments
     - [Top 10 Facebook Profiles, with whom YOU mostly interacted in Facebook Comments](./docs/top10ProfilesWithMostlyCommentedPostsByYou.md)
 
+- Misc
+    - [Facebook Activity on each Quarter of Day](./docs/facebookActivityOnEachQuarterOfDay.md)
+
 
 **This section will keep getting populated !!!**
