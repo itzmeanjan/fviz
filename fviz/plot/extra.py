@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import Dict
+from typing import Dict, Tuple, List
 from copy import deepcopy
 from ..model.reactions import Reactions
 from ..model.comments import Comments
@@ -26,6 +26,27 @@ def mergeWeeklyFacebookActivites(reactions: Reactions, comments: Comments) -> Di
                 _tmp[_iK] = _tmp.get(_iK, 0) + _iV
 
     return _buffer
+
+
+def _prepareDataForPlottingLikeReactionCommentBasedActivities(data: Dict[str, Dict[str, int]]) -> Tuple[List[List[int]], List[str], List[str]]:
+    '''
+        For plotting weekly activity ( facebook likes, reactions, comments ) heatmap with 
+        granularity of quarter of day level, data is prepared here
+
+        We need a 2D array holding actual data to be plotted, tick labels 
+        along both X axis and Y axis
+    '''
+    _x = list(data.keys())
+    _y = ['00:00 - 05:59', '06:00 - 11:59', '12:00 - 17:59', '18:00 - 23:59']
+
+    _buffer = [[] for i in range(len(_y))]
+
+    for v in data.values():
+
+        for i, j in enumerate(_y):
+            _buffer[i].append(v.get(j, 0))
+
+    return _buffer, _x, _y
 
 
 if __name__ == '__main__':
