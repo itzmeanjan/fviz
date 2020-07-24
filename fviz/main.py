@@ -21,6 +21,7 @@ from .model.friends import Friends
 from .plot.friends import plotMonthlyFriendsCreated
 from .model.comments import Comments
 from .plot.comments import plotTopXPeersWithMostCommentedPostsByUser
+from .plot.extra import plotWeeklyHeatMapWithLikesReactionsComments
 from time import time
 
 
@@ -164,6 +165,17 @@ def main():
                     sink,
                     'accumulatedAcivityInEachMinuteOfDayBy{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor)
+                    ))),
+            plotWeeklyHeatMapWithLikesReactionsComments(
+                reactions,
+                comments,
+                'Facebook Activity on each Quarter of Day by {}'.format(
+                    reactions.reactions[0].actor),
+                join(
+                    sink,
+                    'facebookActivityOnEachQuarterOfDayBy{}.svg'.format(
+                        _splitAndJoinActorName(
+                            reactions.reactions[0].actor)
                     ))),
             plotMonthlyFriendsCreated(
                 friends,
