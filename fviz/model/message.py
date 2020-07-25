@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 from datetime import datetime
+from typing import Dict, Any
 
 
 class Message:
@@ -19,6 +20,13 @@ class Message:
     @property
     def timestamp(self) -> datetime:
         return datetime.fromtimestamp(self._timestamp)
+
+    @staticmethod
+    def fromJSON(data: Dict[str, Any]) -> Message:
+        return Message(data['sender_name'],
+                       data['timestamp_ms']/1000,
+                       data.get('content'),
+                       data.get('type'))
 
 
 if __name__ == '__main__':
