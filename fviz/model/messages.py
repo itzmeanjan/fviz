@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
 from __future__ import annotations
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any
 from .message import Message
 
 
@@ -16,6 +16,13 @@ class Messages:
     @property
     def messages(self) -> List[Message]:
         return self._messages
+
+    @staticmethod
+    def fromJSON(data: Dict[str, Any]) -> Messages:
+        return Messages(
+            tuple([i['name'] for i in data[['participants']]]),
+            [Message.fromJSON(i) for i in data],
+            data['is_still_participant'])
 
 
 if __name__ == '__main__':
