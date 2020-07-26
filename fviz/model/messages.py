@@ -21,7 +21,7 @@ class Messages:
     def fromJSON(data: Dict[str, Any]) -> Messages:
         return Messages(
             tuple([i['name'] for i in data[['participants']]]),
-            [Message.fromJSON(i) for i in data],
+            [Message.fromJSON(i) for i in data['messages']],
             data['is_still_participant'])
 
 

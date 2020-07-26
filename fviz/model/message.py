@@ -30,4 +30,4 @@ class Message:
 
 
 if __name__ == '__main__':
-    print('it\'s not supposed to be used this way !')
+    print('It\'s not supposed to be used this way !')
