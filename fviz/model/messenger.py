@@ -5,6 +5,8 @@ from .messages import Messages
 from typing import List, Dict, Any
 from json import load
 from functools import reduce
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from os import cpu_count
 
 
 class Messenger:
@@ -25,7 +27,7 @@ class Messenger:
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
         '''
-           Reads each JSON file content, holding messages
+           Reads each JSON file content concurrently, holding messages
            and objectifies them, finally forming Messenger object,
            which can be manipulated later
         '''
@@ -36,14 +38,17 @@ class Messenger:
                 _content = load(fd)
             return _content
 
-        return Messenger(
-            list(
-                filter(lambda e: e,
-                       reduce(
-                           lambda acc, cur: acc +
-                           [Messages.fromJSON(_getFileContent(cur))],
-                           src,
-                           []))))
+        def _buildMessagesObj(path: str) -> Messages:
+            return Messages.fromJSON(_getFileContent(path))
+
+        with ThreadPoolExecutor(cpu_count() or 1) as _exec:
+            _works = [_exec.submit(_buildMessagesObj, path=i) for i in src]
+
+            return Messenger(
+                list(
+                    filter(lambda e: e,
+                           map(lambda e: e.result(),
+                               as_completed(_works)))))
 
 
 if __name__ == '__main__':

@@ -45,7 +45,7 @@ class Messages:
         _buffer = dict([(i, 0) for i in self.participants])
 
         for i in self.messages:
-            _buffer[i.sender] += 1
+            _buffer[i.sender] = _buffer.get(i.sender, 0) + 1
 
         return _buffer
 
