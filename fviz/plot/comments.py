@@ -22,9 +22,6 @@ def plotTopXPeersWithMostCommentedPostsByUser(data: Comments, title: str, sink: 
         _y = [i[1] for i in _topXPeers]
 
         with plt.style.context("dark_background"):
-            sns.set(
-                style="ticks",
-                context="talk")
             fig = plt.Figure(
                 figsize=(16, 9),
                 dpi=100)

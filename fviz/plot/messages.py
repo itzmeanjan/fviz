@@ -19,9 +19,6 @@ def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> boo
         _y = [i[0] for i in data]
 
         with plt.style.context('dark_background'):
-            sns.set(
-                style="ticks",
-                context="talk")
             fig = plt.Figure(
                 figsize=(16, 9),
                 dpi=100)
@@ -32,9 +29,13 @@ def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> boo
                 orient='h',
                 ax=fig.gca())
 
-            fig.gca().set_xlabel('# of total Messages in Chat')
-            fig.gca().set_ylabel('Chat Name')
-            fig.gca().set_title(title)
+            fig.gca().set_xlabel('# of total Messages in Chat',
+                                 labelpad=12)
+            fig.gca().set_ylabel('Chat Name',
+                                 labelpad=12)
+            fig.gca().set_title(title,
+                                pad=16,
+                                fontsize=20)
 
             fig.savefig(
                 sink,
