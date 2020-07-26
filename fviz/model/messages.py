@@ -37,12 +37,17 @@ class Messages:
         return self._messages[_idx] if _idx >= 0 and _idx < self.count else None
 
     @property
-    def groupByParticipant(self) -> List[Tuple[str, int]]:
+    def groupByParticipant(self) -> Dict[str, int]:
         '''
             Grouping messages by sender, returns a list of sender
             names with their corresponding message contribution count
         '''
-        return Counter(reduce(lambda acc, cur: acc + [cur.sender], self._messages, []))
+        _buffer = dict([(i, 0) for i in self.participants])
+
+        for i in self.messages:
+            _buffer[i.sender] += 1
+
+        return _buffer
 
     @staticmethod
     def fromJSON(data: Dict[str, Any]) -> Messages:
