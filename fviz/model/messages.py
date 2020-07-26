@@ -3,6 +3,8 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from .message import Message
+from collections import Counter
+from functools import reduce
 
 
 class Messages:
@@ -33,6 +35,14 @@ class Messages:
 
     def byIndex(self, _idx: int) -> Message:
         return self._messages[_idx] if _idx >= 0 and _idx < self.count else None
+
+    @property
+    def groupByParticipant(self) -> List[Tuple[str, int]]:
+        '''
+            Grouping messages by sender, returns a list of sender
+            names with their corresponding message contribution count
+        '''
+        return Counter(reduce(lambda acc, cur: acc + [cur.sender], self._messages, []))
 
     @staticmethod
     def fromJSON(data: Dict[str, Any]) -> Messages:
