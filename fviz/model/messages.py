@@ -51,6 +51,13 @@ class Messages:
 
     @staticmethod
     def fromJSON(data: Dict[str, Any]) -> Messages:
+        '''
+            Parse JSON data and build messages object, which will
+            hold all messages in a chat
+        '''
+        if len(data['participants']) < 2:
+            return None
+
         return Messages(
             tuple([i['name'] for i in data['participants']]),
             [Message.fromJSON(i) for i in data['messages']],

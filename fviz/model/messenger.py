@@ -37,11 +37,13 @@ class Messenger:
             return _content
 
         return Messenger(
-            reduce(
-                lambda acc, cur: acc +
-                [Messages.fromJSON(_getFileContent(cur))],
-                src,
-                []))
+            list(
+                filter(lambda e: e,
+                       reduce(
+                           lambda acc, cur: acc +
+                           [Messages.fromJSON(_getFileContent(cur))],
+                           src,
+                           []))))
 
 
 if __name__ == '__main__':
