@@ -213,7 +213,7 @@ def main():
                             reactions.reactions[0].actor)
                     ))),
             plotTopXBusyChats(
-                messenger.topXBusyChats(),
+                messenger.topXBusiestChats(),
                 'Top 15 busiest Facebook Chats of {}'
                 .format(reactions.reactions[0].actor),
                 join(
