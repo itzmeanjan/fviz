@@ -62,6 +62,20 @@ class Messages:
 
         return _buffer
 
+    @property
+    def getPercentageOfContribution(self) -> Dict[str, float]:
+        '''
+            Instead of returning number of messages each participant sent
+            in chat returns their percentage of contribution
+        '''
+        return dict([(k, (v / self.count) * 100) for k, v in self.groupByParticipant.items()])
+
+    def getPercentageOfContributionByParticipant(self, participant: str) -> float:
+        '''
+            Returns of percentage of contribution by participant name
+        '''
+        return self.groupByParticipant.get(participant, 0) * 100 / self.count
+
     @staticmethod
     def fromJSON(src: str) -> Messages:
         '''
