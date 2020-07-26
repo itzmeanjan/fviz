@@ -31,24 +31,15 @@ class Messenger:
            and objectifies them, finally forming Messenger object,
            which can be manipulated later
         '''
-
-        def _getFileContent(path: str) -> Dict[str, Any]:
-            _content = None
-            with open(path, mode='r') as fd:
-                _content = load(fd)
-            return _content
-
-        def _buildMessagesObj(path: str) -> Messages:
-            return Messages.fromJSON(_getFileContent(path))
-
         with ThreadPoolExecutor(cpu_count() or 1) as _exec:
-            _works = [_exec.submit(_buildMessagesObj, path=i) for i in src]
-
             return Messenger(
                 list(
                     filter(lambda e: e,
                            map(lambda e: e.result(),
-                               as_completed(_works)))))
+                               as_completed(
+                                   [_exec.submit(Messages.fromJSON, src=i)
+                                    for i in src]
+                           )))))
 
 
 if __name__ == '__main__':

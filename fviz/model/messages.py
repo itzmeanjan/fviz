@@ -5,6 +5,7 @@ from typing import List, Tuple, Dict, Any
 from .message import Message
 from collections import Counter
 from functools import reduce
+from json import load
 
 
 class Messages:
@@ -50,11 +51,17 @@ class Messages:
         return _buffer
 
     @staticmethod
-    def fromJSON(data: Dict[str, Any]) -> Messages:
+    def fromJSON(src: str) -> Messages:
         '''
             Parse JSON data and build messages object, which will
             hold all messages in a chat
         '''
+
+        def _getFileContent() -> Dict[str, Any]:
+            with open(src, mode='r') as fd:
+                return load(fd)
+
+        data = _getFileContent()
         if len(data['participants']) < 2:
             return None
 
