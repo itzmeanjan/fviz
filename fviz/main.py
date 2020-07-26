@@ -214,7 +214,7 @@ def main():
                     ))),
             plotTopXBusyChats(
                 messenger.topXBusyChats(),
-                'Top 15 Facebook Chats of {}, with highest number of messages'
+                'Top 15 busiest Facebook Chats of {}'
                 .format(reactions.reactions[0].actor),
                 join(
                     sink,
@@ -223,7 +223,7 @@ def main():
                             reactions.reactions[0].actor)
                     )))
         ]
-        print('[+]Completed in {} s with {}% success'.format(
+        print('[+]Completed in \x1b[1;6;35;48m{} s\x1b[0m with \x1b[1;6;35;48m{}%\x1b[0m success'.format(
             time() - _starTm,
             _calculateSuccess(_success)))
     except KeyboardInterrupt:
