@@ -32,6 +32,15 @@ class Messenger:
         '''
         return Counter(dict([(i.name, i.count) for i in self._inbox])).most_common(x)
 
+    def topXChatsWithHighestContributionFromParticipant(self, x: int, participant: str) -> List[Tuple[str, int]]:
+        '''
+            Returns a list ( top X ) of chats where this
+            participant ( in general it's you ) made highest contribution
+        '''
+        return Counter(
+            dict([(i.name, i.getPercentageOfContributionByParticipant(participant))
+                  for i in self._inbox])).most_common(x)
+
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
         '''
