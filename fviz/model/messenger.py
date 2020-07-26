@@ -32,7 +32,7 @@ class Messenger:
         '''
         return Counter(dict([(i.name, i.count) for i in self._inbox])).most_common(x)
 
-    def topXPrivateChatsWithHighestContributionFromParticipant(self, x: int, participant: str) -> List[Tuple[str, int]]:
+    def topXPrivateChatsWithHighestContributionFromParticipant(self, x: int, participant: str) -> List[Tuple[str, str, float, float]]:
         '''
             Returns a list ( top X ) of busiest private chats where this
             participant ( yes it's you ) made highest contribution

@@ -5,6 +5,7 @@ from typing import List, Tuple, Dict, Any
 from .message import Message
 from functools import reduce
 from json import load
+from datetime import datetime
 
 
 class Messages:
@@ -75,6 +76,15 @@ class Messages:
             Returns of percentage of contribution by participant name
         '''
         return self.groupByParticipant.get(participant, 0) * 100 / self.count
+
+    @property
+    def timespan(self) -> Tuple[datetime, datetime]:
+        '''
+            Returns a 2-element tuple of datetime objects, where first one is
+            start time and last one is end time of chat
+        '''
+        _start, _end = self._messages[0].timestamp, self._messages[-1].timestamp
+        return (_start, _end) if _start < _end else (_end, _start)
 
     @staticmethod
     def fromJSON(src: str) -> Messages:
