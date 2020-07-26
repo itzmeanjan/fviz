@@ -21,24 +21,28 @@ def plotTopXPeersWithMostCommentedPostsByUser(data: Comments, title: str, sink: 
         _x = [i[0] for i in _topXPeers]
         _y = [i[1] for i in _topXPeers]
 
-        sns.set(style="ticks", context="talk")
-        plt.style.use("dark_background")
-        
-        fig = plt.Figure(figsize=(16, 9), dpi=100)
-        sns.barplot(x=_y,
-                    y=_x,
-                    orient='h',
-                    ax=fig.gca())
+        with plt.style.context("dark_background"):
+            sns.set(
+                style="ticks",
+                context="talk")
+            fig = plt.Figure(
+                figsize=(16, 9),
+                dpi=100)
 
-        fig.gca().set_xlabel('#-of Involvements')
-        fig.gca().set_ylabel('Facebook Profiles')
-        fig.gca().set_title(title)
+            sns.barplot(x=_y,
+                        y=_x,
+                        orient='h',
+                        ax=fig.gca())
 
-        fig.savefig(
-            sink,
-            bbox_inches='tight',
-            pad_inches=.5)
-        plt.close(fig)
+            fig.gca().set_xlabel('#-of Involvements')
+            fig.gca().set_ylabel('Facebook Profiles')
+            fig.gca().set_title(title)
+
+            fig.savefig(
+                sink,
+                bbox_inches='tight',
+                pad_inches=.5)
+            plt.close(fig)
 
         return True
     except Exception:

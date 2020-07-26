@@ -25,7 +25,7 @@ class Messenger:
     def byIndex(self, _idx: int) -> Messages:
         return self._inbox[_idx] if _idx >= 0 and _idx < self.count else None
 
-    def topXBusyChats(self, x: int) -> List[Tuple[str, int]]:
+    def topXBusyChats(self, x: int = 15) -> List[Tuple[str, int]]:
         '''
             Finds top X number of chats with highest number of messages
             transacted

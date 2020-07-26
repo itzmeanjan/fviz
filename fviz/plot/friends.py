@@ -44,49 +44,49 @@ def plotMonthlyFriendsCreated(friends: Friends, title: str, sink: str) -> bool:
 
         _x, _y = _prepareDataForPlottingMonthlyFriendsCreated(friends)
 
-        sns.set(style="ticks", context="talk")
-        plt.style.use("dark_background")
+        with plt.style.context("dark_background"):
+            sns.set(style="ticks", context="talk")
 
-        _fig, _axes = plt.subplots(
-            ceil(len(_x)/12),
-            1,
-            figsize=(40, ceil(len(_x)/12) * 10),
-            dpi=100
-        )
-
-        _start = 0
-        _end = 12
-
-        for i in _axes:
-            _tmpX = _x[_start: _end]
-
-            sns.lineplot(
-                x=range(len(_tmpX)),
-                y=_y[_start: _end],
-                ax=i
+            _fig, _axes = plt.subplots(
+                ceil(len(_x)/12),
+                1,
+                figsize=(40, ceil(len(_x)/12) * 10),
+                dpi=100
             )
 
-            i.set_xticks(range(len(_tmpX)))
-            i.set_xticklabels(_tmpX)
+            _start = 0
+            _end = 12
 
-            i.set_xlabel('Time')
-            i.set_ylabel('#-of Friends Created')
-            i.set_title(
-                '{} [ {} - {} ]'.format(
-                    title,
-                    _tmpX[0],
-                    _tmpX[-1]
+            for i in _axes:
+                _tmpX = _x[_start: _end]
+
+                sns.lineplot(
+                    x=range(len(_tmpX)),
+                    y=_y[_start: _end],
+                    ax=i
                 )
-            )
 
-            _start = _end
-            _end += 12
+                i.set_xticks(range(len(_tmpX)))
+                i.set_xticklabels(_tmpX)
 
-        _fig.savefig(
-            sink,
-            bbox_inches='tight',
-            pad_inches=.5)
-        plt.close(_fig)
+                i.set_xlabel('Time')
+                i.set_ylabel('#-of Friends Created')
+                i.set_title(
+                    '{} [ {} - {} ]'.format(
+                        title,
+                        _tmpX[0],
+                        _tmpX[-1]
+                    )
+                )
+
+                _start = _end
+                _end += 12
+
+            _fig.savefig(
+                sink,
+                bbox_inches='tight',
+                pad_inches=.5)
+            plt.close(_fig)
 
         return True
     except Exception:

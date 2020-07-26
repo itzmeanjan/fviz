@@ -18,6 +18,7 @@ class Messages:
         self._messages = messages
         self.active = active
 
+    @property
     def name(self) -> str:
         return self.title if self.isGroupChat else ' <-> '.join(self.participants)
 
