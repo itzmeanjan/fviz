@@ -3,7 +3,6 @@
 from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from .message import Message
-from collections import Counter
 from functools import reduce
 from json import load
 
@@ -13,10 +12,14 @@ class Messages:
         Holder for all messages in a chat ( private/ group )
     '''
 
-    def __init__(self, participants: Tuple[str], messages: List[Message], active: bool):
+    def __init__(self, title: str, participants: Tuple[str], messages: List[Message], active: bool):
+        self.title = title
         self._participants = participants
         self._messages = messages
         self.active = active
+
+    def name(self) -> str:
+        return self.title if self.isGroupChat else ' <-> '.join(self.participants)
 
     @property
     def messages(self) -> List[Message]:
@@ -74,6 +77,7 @@ class Messages:
             return None
 
         return Messages(
+            data['title'],
             tuple([i['name'] for i in data['participants']]),
             [Message.fromJSON(i) for i in data['messages']],
             data['is_still_participant'])

@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 from .messages import Messages
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 from json import load
 from functools import reduce
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
+from collections import Counter
 
 
 class Messenger:
@@ -23,6 +24,13 @@ class Messenger:
 
     def byIndex(self, _idx: int) -> Messages:
         return self._inbox[_idx] if _idx >= 0 and _idx < self.count else None
+
+    def topXBusyChats(self, x: int) -> List[Tuple[str, int]]:
+        '''
+            Finds top X number of chats with highest number of messages
+            transacted
+        '''
+        return Counter(dict([(i.name, i.count) for i in self._inbox])).most_common(x)
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
