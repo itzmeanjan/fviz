@@ -25,12 +25,37 @@ class Messenger:
     def byIndex(self, _idx: int) -> Messages:
         return self._inbox[_idx] if _idx >= 0 and _idx < self.count else None
 
-    def topXBusyChats(self, x: int = 15) -> List[Tuple[str, int]]:
+    def topXBusiestChats(self, x: int = 15) -> List[Tuple[str, int]]:
         '''
             Finds top X number of chats with highest number of messages
             transacted
         '''
         return Counter(dict([(i.name, i.count) for i in self._inbox])).most_common(x)
+
+    def topXPrivateChatsWithHighestContributionFromParticipant(self, x: int, participant: str) -> List[Tuple[str, str, float, float]]:
+        '''
+            Returns a list ( top X ) of busiest private chats where this
+            participant ( yes it's you ) made highest contribution
+        '''
+
+        def _organizeParticipants(_participants: Tuple[str]) -> Tuple[str]:
+            return _participants if _participants[0] == participant \
+                else (_participants[1], _participants[0])
+
+        return list(
+            map(lambda e: (e[0], e[1], e[-1], 100 - e[-1]),
+                sorted(
+                sorted(
+                    map(
+                        lambda e: (*_organizeParticipants(e.participants),
+                                   e.count,
+                                   e.getPercentageOfContributionByParticipant(participant)),
+                        filter(lambda e: e.participantCount == 2,
+                               self._inbox)),
+                    key=lambda e: e[-1] * e[-2],
+                    reverse=True)[:x],
+                key=lambda e: e[-1],
+                reverse=True)))
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
