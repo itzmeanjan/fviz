@@ -8,8 +8,8 @@ import seaborn as sns
 
 def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> bool:
     '''
-        Plotting top X number of busy chats as bar plot in terms
-        of number of messages being transacted
+        Plotting top X number of busy chats ( in terms
+        of number of messages being transacted ) as bar plot
     '''
     if not data:
         return False

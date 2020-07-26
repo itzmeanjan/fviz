@@ -39,15 +39,18 @@ class Messenger:
            and objectifies them, finally forming Messenger object,
            which can be manipulated later
         '''
-        with ThreadPoolExecutor(cpu_count() or 1) as _exec:
-            return Messenger(
-                list(
-                    filter(lambda e: e,
-                           map(lambda e: e.result(),
-                               as_completed(
+        try:
+            with ThreadPoolExecutor(cpu_count() or 1) as _exec:
+                return Messenger(
+                    list(
+                        filter(lambda e: e,
+                               map(lambda e: e.result(),
+                                   as_completed(
                                    [_exec.submit(Messages.fromJSON, src=i)
                                     for i in src]
-                           )))))
+                               )))))
+        except Exception:
+            return None
 
 
 if __name__ == '__main__':
