@@ -17,6 +17,13 @@ class Messages:
     def messages(self) -> List[Message]:
         return self._messages
 
+    @property
+    def count(self) -> int:
+        return len(self._messages)
+
+    def byIndex(self, _idx: int) -> Message:
+        return self._messages[_idx] if _idx >= 0 and _idx < self.count else None
+
     @staticmethod
     def fromJSON(data: Dict[str, Any]) -> Messages:
         return Messages(
