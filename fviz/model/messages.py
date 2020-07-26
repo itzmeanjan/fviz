@@ -11,7 +11,9 @@ class Messages:
     '''
 
     def __init__(self, participants: Tuple[str], messages: List[Message], active: bool):
+        self._participants = participants
         self._messages = messages
+        self.active = active
 
     @property
     def messages(self) -> List[Message]:
@@ -21,13 +23,21 @@ class Messages:
     def count(self) -> int:
         return len(self._messages)
 
+    @property
+    def participantCount(self) -> int:
+        return len(self._participants)
+
+    @property
+    def participants(self) -> Tuple[str]:
+        return self._participants
+
     def byIndex(self, _idx: int) -> Message:
         return self._messages[_idx] if _idx >= 0 and _idx < self.count else None
 
     @staticmethod
     def fromJSON(data: Dict[str, Any]) -> Messages:
         return Messages(
-            tuple([i['name'] for i in data[['participants']]]),
+            tuple([i['name'] for i in data['participants']]),
             [Message.fromJSON(i) for i in data['messages']],
             data['is_still_participant'])
 
