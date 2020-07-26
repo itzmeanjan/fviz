@@ -38,6 +38,14 @@ class Messages:
         return self._messages[_idx] if _idx >= 0 and _idx < self.count else None
 
     @property
+    def isGroupChat(self) -> bool:
+        '''
+            In a private chat there're two participants,
+            if we've more participant, it's a group chat
+        '''
+        return self.participantCount > 2
+
+    @property
     def groupByParticipant(self) -> Dict[str, int]:
         '''
             Grouping messages by sender, returns a list of sender
