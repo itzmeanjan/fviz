@@ -62,7 +62,8 @@ def _prepareDataForTopXPrivateChatsWithHighestContributonFromYou(messenger: Mess
     _x = list(chain.from_iterable(
         [['Rank : {}'.format(i+1)] * 2 for i in range(x)]))
     _y = list(chain.from_iterable([i[2:] for i in _data]))
-    _hue = list(chain.from_iterable([['0', '1'] for i in range(x)]))
+    _hue = list(chain.from_iterable(
+        [['Peer : 1', 'Peer : 2'] for i in range(x)]))
     _names = list(chain.from_iterable([i[:2] for i in _data]))
 
     return _x, _y, _hue, _names
@@ -93,19 +94,24 @@ def plotTopXPrivateChatsWithHighestContributonFromYou(messenger: Messenger, x: i
                 x=_x,
                 y=_y,
                 hue=_hue,
-                palette='Greens',
+                palette='Oranges',
                 ax=fig.gca())
+
+            _names = list(
+                chain.from_iterable(
+                    zip(*[_names[i:i+2] for i in range(0, x * 2, 2)])))
 
             for j, k in enumerate(fig.gca().patches):
                 fig.gca().text(k.get_x() + k.get_width() / 2,
                                k.get_y() + k.get_height() * .2 + .1,
-                               _names[j][:16],
+                               _names[j],
                                ha='center',
                                rotation=90,
-                               fontsize=6)
+                               fontsize=10,
+                               color='black')
 
             fig.gca().set_ylim(0, 100)
-            fig.gca().set_xlabel('Ranked Facebook Chats',
+            fig.gca().set_xlabel('Top Ranked Facebook Chats',
                                  labelpad=12)
             fig.gca().set_ylabel('Percentage of Participation in Chat',
                                  labelpad=12)
