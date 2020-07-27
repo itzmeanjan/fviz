@@ -227,13 +227,13 @@ def main():
                     ))),
             plotTopXPrivateChatsWithHighestContributonFromYou(
                 messenger,
-                15,
+                10,
                 reactions.reactions[0].actor,
-                'Top 15 Private Facebook Chats with highest contributions from {}'
+                'Top 10 Private Facebook Chats with highest contributions from {}'
                 .format(reactions.reactions[0].actor),
                 join(
                     sink,
-                    'top15PrivateFacebookChatsWithHighestContributionFrom{}.svg'.format(
+                    'top10PrivateFacebookChatsWithHighestContributionFrom{}.svg'.format(
                         _splitAndJoinActorName(reactions.reactions[0].actor))))
         ]
         print('[+]Completed in \x1b[1;6;35;48m{} s\x1b[0m with \x1b[1;6;35;48m{}%\x1b[0m success'.format(
