@@ -4,6 +4,8 @@ from __future__ import annotations
 from typing import List, Tuple
 from matplotlib import pyplot as plt
 import seaborn as sns
+from ..model.messenger import Messenger
+from itertools import chain
 
 
 def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> bool:
@@ -46,6 +48,22 @@ def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> boo
         return True
     except Exception:
         return False
+
+
+def _prepareDataForTopXPrivateChatsWithHighestContributonFromYou(messenger: Messenger, x: int, participant: str) -> Tuple[List[str], List[float], List[str]]:
+    '''
+        Preparing data to be plotted as grouped bar plot, for top X private
+        chats, where you've high participation
+    '''
+    _data = messenger.topXPrivateChatsWithHighestContributionFromParticipant(
+        x,
+        participant)
+
+    _x = list(chain.from_iterable([i[:2] for i in _data]))
+    _y = list(chain.from_iterable([i[2:] for i in _data]))
+    _hue = [['0', '1'] for i in range(x)]
+
+    return _x, _y, _hue
 
 
 if __name__ == '__main__':
