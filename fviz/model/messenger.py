@@ -113,14 +113,18 @@ class Messenger:
                 Finds top chat thread from all chat threads of a week, where it's top
                 in terms of number of messages transferred
             '''
-            return max(_data, key=lambda e: mul(*e.values()))
+            return max(_data,
+                       key=lambda e: reduce(
+                           lambda acc, cur: acc * cur,
+                           e.values(),
+                           1))
 
         return list(
             map(
                 lambda e: (e[0], _mostActiveChatThread(e[1])),
                 filter(
                     lambda e: e[1],
-                    zip(self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
+                    zip(*self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
@@ -130,6 +134,9 @@ class Messenger:
            which can be manipulated later
         '''
         try:
+            if not src:
+                raise Exception('No files specified')
+
             with ThreadPoolExecutor(cpu_count() or 1) as _exec:
                 return Messenger(
                     list(
