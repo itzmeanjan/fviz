@@ -57,6 +57,14 @@ class Messenger:
                 key=lambda e: e[-1],
                 reverse=True)))
 
+    @property
+    def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> List[Dict[str, Dict[str, int]]]:
+        '''
+            Classifies all chats in this user's messenger, by their week of occurance
+            and under each week which chat participant sent how many messages is also kept
+        '''
+        return [i.groupByWeekOfOccurance for i in self.inbox]
+
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
         '''
