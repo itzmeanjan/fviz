@@ -10,6 +10,7 @@ from os import cpu_count
 from collections import Counter
 from datetime import datetime, timedelta
 from itertools import chain
+from operator import mul
 
 
 class Messenger:
@@ -68,7 +69,7 @@ class Messenger:
         return min(_all), max(_all)
 
     @property
-    def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> List[Dict[str, Dict[str, int]]]:
+    def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> Tuple[List[str], List[List[Dict[str, int]]]]:
         '''
             Classifies all chats in this user's messenger, by their week of occurance
             and under each week which chat participant sent how many messages is also kept
@@ -100,6 +101,26 @@ class Messenger:
             _buffer.append(_tmp or None)
 
         return _weeks, _buffer
+
+    @property
+    def topChatThreadPerWeek(self) -> Tuple[List[str], List[Dict[str, int]]]:
+        '''
+            Top chat thread for each week, along with week identifier
+        '''
+
+        def _mostActiveChatThread(_data: List[Dict[str, int]]) -> Dict[str, int]:
+            '''
+                Finds top chat thread from all chat threads of a week, where it's top
+                in terms of number of messages transferred
+            '''
+            return max(_data, key=lambda e: mul(*e.values()))
+
+        return list(
+            map(
+                lambda e: (e[0], _mostActiveChatThread(e[1])),
+                filter(
+                    lambda e: e[1],
+                    zip(self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
