@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 
+from __future__ import annotations
 from typing import List, Dict, Tuple
 from os.path import exists
 from json import load
