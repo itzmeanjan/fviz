@@ -8,6 +8,8 @@ from functools import reduce
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
 from collections import Counter
+from datetime import datetime
+from itertools import chain
 
 
 class Messenger:
@@ -58,12 +60,21 @@ class Messenger:
                 reverse=True)))
 
     @property
+    def timespan(self) -> Tuple[datetime, datetime]:
+        '''
+            Life time of whole facebook messenger chat with starting & ending time
+        '''
+        _all = chain.from_iterable([i.timespan for i in self.inbox])
+        return min(_all), max(_all)
+
+    @property
     def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> List[Dict[str, Dict[str, int]]]:
         '''
             Classifies all chats in this user's messenger, by their week of occurance
             and under each week which chat participant sent how many messages is also kept
         '''
-        return [i.groupByWeekOfOccurance for i in self.inbox]
+        _data = [i.groupByWeekOfOccurance for i in self.inbox]
+        _weeks = []
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
