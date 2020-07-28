@@ -64,7 +64,7 @@ class Messenger:
         '''
             Life time of whole facebook messenger chat with starting & ending time
         '''
-        _all = chain.from_iterable([i.timespan for i in self.inbox])
+        _all = list(chain.from_iterable([i.timespan for i in self.inbox]))
         return min(_all), max(_all)
 
     @property

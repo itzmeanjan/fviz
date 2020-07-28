@@ -101,7 +101,8 @@ class Messages:
                                          _tm.strftime('%Y'))
 
             if _week not in _buffer:
-                _buffer[_week] = {i.sender: 1}
+                _buffer[_week] = dict([(j, 1) if j == i.sender else (j, 0)
+                                       for j in self.participants])
                 continue
 
             _buffer[_week][i.sender] = _buffer[_week].get(i.sender, 0) + 1
