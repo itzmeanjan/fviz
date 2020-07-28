@@ -8,6 +8,9 @@ from functools import reduce
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from os import cpu_count
 from collections import Counter
+from datetime import datetime, timedelta
+from itertools import chain
+from operator import mul
 
 
 class Messenger:
@@ -56,6 +59,68 @@ class Messenger:
                     reverse=True)[:x],
                 key=lambda e: e[-1],
                 reverse=True)))
+
+    @property
+    def timespan(self) -> Tuple[datetime, datetime]:
+        '''
+            Life time of whole facebook messenger chat with starting & ending time
+        '''
+        _all = list(chain.from_iterable([i.timespan for i in self.inbox]))
+        return min(_all), max(_all)
+
+    @property
+    def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> Tuple[List[str], List[List[Dict[str, int]]]]:
+        '''
+            Classifies all chats in this user's messenger, by their week of occurance
+            and under each week which chat participant sent how many messages is also kept
+        '''
+        _data = [i.groupByWeekOfOccurance for i in self.inbox]
+
+        # chronologically ascending weeks
+        _weeks = []
+        # start and end datetime of all chats in messenger
+        _start, _end = self.timespan
+
+        while _start <= _end:
+            _week = 'Week {}, {}'.format(int(_start.strftime('%W'), base=10) + 1,
+                                         _start.strftime('%Y'))
+            if _week not in _weeks:
+                _weeks.append(_week)
+            _start += timedelta(days=7)
+
+        _buffer = []
+
+        for i in _weeks:
+
+            _tmp = []
+            for j in _data:
+                if i not in j:
+                    continue
+                _tmp.append(j[i])
+
+            _buffer.append(_tmp or None)
+
+        return _weeks, _buffer
+
+    @property
+    def topChatThreadPerWeek(self) -> Tuple[List[str], List[Dict[str, int]]]:
+        '''
+            Top chat thread for each week, along with week identifier
+        '''
+
+        def _mostActiveChatThread(_data: List[Dict[str, int]]) -> Dict[str, int]:
+            '''
+                Finds top chat thread from all chat threads of a week, where it's top
+                in terms of number of messages transferred
+            '''
+            return max(_data, key=lambda e: mul(*e.values()))
+
+        return list(
+            map(
+                lambda e: (e[0], _mostActiveChatThread(e[1])),
+                filter(
+                    lambda e: e[1],
+                    zip(self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
 
     @staticmethod
     def fromJSON(src: List[str]) -> Messenger:

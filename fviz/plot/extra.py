@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from typing import Dict, Tuple, List
 from copy import deepcopy
 from ..model.reactions import Reactions

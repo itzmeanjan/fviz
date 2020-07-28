@@ -86,6 +86,29 @@ class Messages:
         _start, _end = self._messages[0].timestamp, self._messages[-1].timestamp
         return (_start, _end) if _start < _end else (_end, _start)
 
+    @property
+    def groupByWeekOfOccurance(self) -> Dict[str, Dict[str, int]]:
+        '''
+            Grouping all messages in this chat thread by their
+            week of occurance, where week is in this form: `Week X, Y`,
+            X is week number ( starting with 1 ) in year Y
+        '''
+        _buffer = {}
+
+        for i in self.messages:
+            _tm = i.timestamp
+            _week = 'Week {}, {}'.format(int(_tm.strftime('%W'), base=10) + 1,
+                                         _tm.strftime('%Y'))
+
+            if _week not in _buffer:
+                _buffer[_week] = dict([(j, 1) if j == i.sender else (j, 0)
+                                       for j in self.participants])
+                continue
+
+            _buffer[_week][i.sender] = _buffer[_week].get(i.sender, 0) + 1
+
+        return _buffer
+
     @staticmethod
     def fromJSON(src: str) -> Messages:
         '''

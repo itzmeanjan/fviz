@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from argparse import ArgumentParser
 from typing import Tuple, List
 from os.path import exists, abspath, join

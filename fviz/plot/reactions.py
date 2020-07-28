@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from typing import Dict, List, Tuple
 from matplotlib import pyplot as plt
 import seaborn as sns

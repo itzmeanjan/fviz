@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from ..model.friends import Friends
 from typing import Tuple, List
 from datetime import timedelta
