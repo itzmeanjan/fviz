@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from ..model.comments import Comments
 import seaborn as sns
 from matplotlib import pyplot as plt

@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from typing import List, Tuple, Dict, Any
 from .message import Message
 from functools import reduce

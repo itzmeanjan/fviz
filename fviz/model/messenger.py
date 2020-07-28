@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from .messages import Messages
 from typing import List, Dict, Any, Tuple
 from json import load

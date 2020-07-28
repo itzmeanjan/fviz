@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from typing import List, Tuple, Dict, Set
 from datetime import datetime, date, time, timedelta
 from os.path import exists

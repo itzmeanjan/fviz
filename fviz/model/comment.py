@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from typing import List, Dict, Any
 from datetime import datetime
 from re import compile as regCompile, I as regI, Match

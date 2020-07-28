@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 
-from __future__ import annotations
 from os.path import exists
 from os import mkdir
 from zipfile import ZipFile
