@@ -174,6 +174,11 @@ def _prepareDataForTopChatThreadEachWeek(messenger: Messenger) -> Tuple[List[str
 
 
 def plotTopChatThreadEachWeek(messenger: Messenger, title: str, sink: str) -> bool:
+    '''
+        Plotting top facebook private chat thread on each week
+        when this user was active. This is plotted as a grouped
+        bar chart.
+    '''
     if not messenger:
         return False
 
