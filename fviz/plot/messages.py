@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 from matplotlib import pyplot as plt
 import seaborn as sns
 from ..model.messenger import Messenger
@@ -128,6 +128,44 @@ def plotTopXPrivateChatsWithHighestContributonFromYou(messenger: Messenger, x: i
     except Exception as e:
         print(e)
         return False
+
+
+def _prepareDataForTopChatThreadEachWeek(messenger: Messenger) -> Tuple[List[str], List[float], List[str]]:
+    '''
+        Prepares data for plotting grouped bar chat, for weekly
+        top private chat thread.
+    '''
+    def _orderParticipantsByAscendingContribution(_participants: Dict[str, int]) -> List[str]:
+        '''
+            Given a dictionary of {str: int} form, sorts keys
+            by their corresponding values, ascendingly
+        '''
+        return sorted(_participants, key=lambda e: _participants[e])
+
+    def _orderParticipantContributionsAscendingly(_participants: Dict[str, int]) -> List[float]:
+        '''
+            Given a dictionary of {str: int} form, sorts values
+            ascendingly, and converts them to percentage of contribution
+            by dividing each of them by sum of values in dict and multiplying 
+            by 100
+        '''
+        return list(map(lambda e: (e / sum(_participants.values())) * 100,
+                        sorted(_participants.values(),
+                               key=lambda e: e)))
+
+    _data = messenger.topChatThreadPerWeek
+
+    _x = list(chain.from_iterable(map(lambda e: [e[0]] * 2, _data)))
+    _names = list(
+        chain.from_iterable(
+            map(lambda e: _orderParticipantsByAscendingContribution(e[1]),
+                _data)))
+    _y = list(
+        chain.from_iterable(
+            map(lambda e: _orderParticipantContributionsAscendingly(e[1]),
+                _data)))
+
+    return _x, _y, _names
 
 
 if __name__ == '__main__':
