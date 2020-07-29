@@ -74,7 +74,9 @@ class Messenger:
             Classifies all chats in this user's messenger, by their week of occurance
             and under each week which chat participant sent how many messages is also kept
         '''
-        _data = [i.groupByWeekOfOccurance for i in self.inbox]
+        _data = list(filter(lambda e: e,
+                            map(lambda e: None if e.isGroupChat else e.groupByWeekOfOccurance,
+                                self.inbox)))
 
         # chronologically ascending weeks
         _weeks = []
@@ -103,7 +105,7 @@ class Messenger:
         return _weeks, _buffer
 
     @property
-    def topChatThreadPerWeek(self) -> Tuple[List[str], List[Dict[str, int]]]:
+    def topChatThreadPerWeek(self) -> List[Tuple[str, Dict[str, int]]]:
         '''
             Top chat thread for each week, along with week identifier
         '''
