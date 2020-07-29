@@ -210,7 +210,7 @@ def plotTopChatThreadEachWeek(messenger: Messenger, title: str, sink: str) -> bo
             for j, k in enumerate(i.patches):
                 i.text(k.get_x() + k.get_width() * .5,
                        k.get_y() + k.get_height() * .36 + k.get_width() * .9,
-                       '{} : {}%'.format(_tmpNames[j], _tmpY[j]),
+                       '{} ( {:.2f} % )'.format(_tmpNames[j], _tmpY[j]),
                        ha='center',
                        rotation=90,
                        fontsize=14,
