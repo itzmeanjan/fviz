@@ -192,25 +192,29 @@ def plotTopChatThreadEachWeek(messenger: Messenger, title: str, sink: str) -> bo
 
         for i in _axes:
             _tmpX = _x[_start: _end]
+            _tmpY = _y[_start: _end]
 
             sns.barplot(
                 x=_tmpX,
-                y=_y[_start: _end],
+                y=_tmpY,
                 hue=_hue[_start: _end],
-                palette='Greens',
+                palette='YlGn',
                 ax=i)
 
             _tmpNames = _names[_start: _end]
             _tmpNames = list(chain.from_iterable(
                 zip(*[_tmpNames[j:j+2] for j in range(0, len(_tmpNames), 2)])))
+            _tmpY = list(chain.from_iterable(
+                zip(*[_tmpY[j:j+2] for j in range(0, len(_tmpY), 2)])))
 
             for j, k in enumerate(i.patches):
                 i.text(k.get_x() + k.get_width() * .5,
                        k.get_y() + k.get_height() * .36 + k.get_width() * .9,
-                       _tmpNames[j],
+                       '{} : {}%'.format(_tmpNames[j], _tmpY[j]),
                        ha='center',
                        rotation=90,
-                       fontsize=12)
+                       fontsize=14,
+                       color='black')
 
             i.set_ylim(0, 100)
             i.set_ylabel('Percentage of Participation in Chat')
