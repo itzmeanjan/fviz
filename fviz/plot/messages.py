@@ -6,7 +6,6 @@ import seaborn as sns
 from ..model.messenger import Messenger
 from itertools import chain
 from math import ceil
-from traceback import format_exception
 
 
 def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> bool:
@@ -242,9 +241,7 @@ def plotTopChatThreadEachWeek(messenger: Messenger, title: str, sink: str) -> bo
         plt.close(_fig)
 
         return True
-    except Exception as e:
-        format_exception(e)
-        print(e)
+    except Exception:
         return False
 
 
