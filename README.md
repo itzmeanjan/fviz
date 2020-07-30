@@ -4,7 +4,7 @@
 
 Facebook Data Visualizer - made with &lt;3
 
-**Released v0.7.0 on PyPI**
+**Released v0.8.0 on PyPI**
 
 ## vision
 
@@ -67,6 +67,7 @@ All these plots to be generated when you invoke *fviz* with proper params.
 - Messages
     - [Top X busiest Facebook Chats](./docs/top15FacebookChatsWithMostMessages.md)
     - [Top X Private Facebook Chats, where you've shown most interest](./docs/top10PrivateFacebookChatsWithHighestContributionFromYOU.md)
+    - [Weekly Top Private Facebook Chat Thread for YOU](./docs/weeklyTopPrivateFacebookChatThreadForYou.md)
 
 - Misc
     - [Facebook Activity on each Quarter of Day](./docs/facebookActivityOnEachQuarterOfDay.md)

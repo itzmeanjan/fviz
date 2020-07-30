@@ -5,6 +5,7 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 from ..model.messenger import Messenger
 from itertools import chain
+from math import ceil
 
 
 def plotTopXBusyChats(data: List[Tuple[str, int]], title: str, sink: str) -> bool:
@@ -130,7 +131,7 @@ def plotTopXPrivateChatsWithHighestContributonFromYou(messenger: Messenger, x: i
         return False
 
 
-def _prepareDataForTopChatThreadEachWeek(messenger: Messenger) -> Tuple[List[str], List[float], List[str]]:
+def _prepareDataForTopChatThreadEachWeek(messenger: Messenger) -> Tuple[List[str], List[float], List[str], List[str]]:
     '''
         Prepares data for plotting grouped bar chat, for weekly
         top private chat thread.
@@ -160,12 +161,88 @@ def _prepareDataForTopChatThreadEachWeek(messenger: Messenger) -> Tuple[List[str
         chain.from_iterable(
             map(lambda e: _orderParticipantsByAscendingContribution(e[1]),
                 _data)))
+    _hue = list(
+        chain.from_iterable(
+            map(lambda e: ('Contributor : 1', 'Contributor : 2'),
+                _data)))
     _y = list(
         chain.from_iterable(
             map(lambda e: _orderParticipantContributionsAscendingly(e[1]),
                 _data)))
 
-    return _x, _y, _names
+    return _x, _y, _hue, _names
+
+
+def plotTopChatThreadEachWeek(messenger: Messenger, title: str, sink: str) -> bool:
+    '''
+        Plotting top facebook private chat thread on each week
+        when this user was active. This is plotted as a grouped
+        bar chart.
+    '''
+    if not messenger:
+        return False
+
+    try:
+        _x, _y, _hue, _names = _prepareDataForTopChatThreadEachWeek(messenger)
+
+        sns.set(style='darkgrid')
+        _fig, _axes = plt.subplots(
+            ceil(len(_x) / 104),
+            1,
+            figsize=(108, ceil(len(_x) / 104) * 18),
+            dpi=100)
+        if len(_x) <= 104:
+            _axes = [_axes]
+
+        _start = 0
+        _end = 104
+
+        for i in _axes:
+            _tmpX = _x[_start: _end]
+            _tmpY = _y[_start: _end]
+
+            sns.barplot(
+                x=_tmpX,
+                y=_tmpY,
+                hue=_hue[_start: _end],
+                palette='YlGn',
+                ax=i)
+
+            _tmpNames = _names[_start: _end]
+            _tmpNames = list(chain.from_iterable(
+                zip(*[_tmpNames[j:j+2] for j in range(0, len(_tmpNames), 2)])))
+            _tmpY = list(chain.from_iterable(
+                zip(*[_tmpY[j:j+2] for j in range(0, len(_tmpY), 2)])))
+
+            for j, k in enumerate(i.patches):
+                i.text(k.get_x() + k.get_width() * .5,
+                       k.get_y() + k.get_height() * .36 + k.get_width() * .9,
+                       '{} ( {:.2f}% )'.format(_tmpNames[j], _tmpY[j]),
+                       ha='center',
+                       rotation=90,
+                       fontsize=14,
+                       color='black')
+
+            i.set_ylim(0, 100)
+            i.set_ylabel('Percentage of Participation in Chat')
+            i.set_title('{} [ {} - {} ]'.format(
+                title,
+                _tmpX[0],
+                _tmpX[-1]),
+                fontsize=20,
+                pad=12)
+            _start = _end
+            _end += 104
+
+        _fig.savefig(
+            sink,
+            bbox_inches='tight',
+            pad_inches=.5)
+        plt.close(_fig)
+
+        return True
+    except Exception:
+        return False
 
 
 if __name__ == '__main__':
