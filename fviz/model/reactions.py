@@ -7,6 +7,7 @@ from os.path import exists
 from json import load
 from functools import reduce
 from .reactedContent import ReactedContent
+from operator import sub
 
 
 class Reactions:
@@ -302,7 +303,7 @@ class Reactions:
         return buffer
 
     @property
-    def getInBetweenDelays(self) -> List[timedelta]:
+    def getInBetweenDelays(self) -> map:
         '''
             Finds all time delays in between any two consecutive like/ reaction
             event, and returns it as a list of timedelta(s)
@@ -310,18 +311,11 @@ class Reactions:
             For N number of like/ reaction events, N-1 number of timedeltas will
             be there
         '''
-        buffer = []
-
-        for i in range(1, self.count):
-            _reactionOne, _reactionTwo = self.getReactionByIndex(
-                i-1), self.getReactionByIndex(i)
-
-            if _reactionOne.time > _reactionTwo.time:
-                buffer.append(_reactionOne.time - _reactionTwo.time)
-            else:
-                buffer.append(_reactionTwo.time - _reactionOne.time)
-
-        return buffer
+        return map(lambda e: sub(
+            *sorted((
+                self.getReactionByIndex(e-1).time, self.getReactionByIndex(e).time),
+                reverse=True)),
+            range(1, self.count))
 
     @property
     def getCumulativeSumOfDelays(self) -> List[timedelta]:
