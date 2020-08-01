@@ -7,7 +7,7 @@ from os.path import exists
 from json import load
 from functools import reduce
 from .reactedContent import ReactedContent
-from operator import sub
+from operator import sub, add
 
 
 class Reactions:
@@ -353,9 +353,9 @@ class Reactions:
         '''
             Computes mean time delay of all likes/ reactions events
         '''
-        _buffer = self.getInBetweenDelays
+        _buffer = list(self.getInBetweenDelays)
 
-        return reduce(lambda acc, cur: acc + cur, _buffer[1:], _buffer[0]) / len(_buffer)
+        return reduce(add, _buffer[1:], _buffer[0]) / len(_buffer)
 
     @property
     def getMedianTimeDelay(self) -> timedelta:
