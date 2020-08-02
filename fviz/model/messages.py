@@ -63,6 +63,12 @@ class Messages:
 
         return _buffer
 
+    def getContributionCountByParticipant(self, participant: str) -> int:
+        '''
+            Computes total #-of messages sent by this participant into this chat
+        '''
+        return self.groupByParticipant.get(participant, 0)
+
     @property
     def getPercentageOfContribution(self) -> Dict[str, float]:
         '''
@@ -75,7 +81,7 @@ class Messages:
         '''
             Returns of percentage of contribution by participant name
         '''
-        return self.groupByParticipant.get(participant, 0) * 100 / self.count
+        return self.getPercentageOfContribution.get(participant, 0.0)
 
     @property
     def timespan(self) -> Tuple[datetime, datetime]:
