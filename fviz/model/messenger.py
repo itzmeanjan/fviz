@@ -92,7 +92,7 @@ class Messenger:
                     reverse=True)),
             key=lambda e: e[-2])[:x]
 
-    @ property
+    @property
     def timespan(self) -> Tuple[datetime, datetime]:
         '''
             Life time of whole facebook messenger chat with starting & ending time
@@ -100,7 +100,7 @@ class Messenger:
         _all = list(chain.from_iterable([i.timespan for i in self.inbox]))
         return min(_all), max(_all)
 
-    @ property
+    @property
     def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> Tuple[List[str], List[List[Dict[str, int]]]]:
         '''
             Classifies all chats in this user's messenger, by their week of occurance
@@ -136,7 +136,7 @@ class Messenger:
 
         return _weeks, _buffer
 
-    @ property
+    @property
     def topChatThreadPerWeek(self) -> List[Tuple[str, Dict[str, int]]]:
         '''
             Top chat thread for each week, along with week identifier
@@ -160,7 +160,7 @@ class Messenger:
                     lambda e: e[1],
                     zip(*self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
 
-    @ staticmethod
+    @staticmethod
     def fromJSON(src: List[str]) -> Messenger:
         '''
            Reads each JSON file content concurrently, holding messages
