@@ -11,6 +11,7 @@ from collections import Counter
 from datetime import datetime, timedelta
 from itertools import chain
 from operator import mul
+from math import ceil
 
 
 class Messenger:
@@ -70,14 +71,25 @@ class Messenger:
             return _participants if _participants[0] == participant \
                 else (_participants[1], _participants[0])
 
-        def _getOrderedParticipantsAlongWithPercentageOfContributions(_participants: Tuple[str, str], mObj: Messages) -> Tuple[str, str, float, float]:
+        def _getOrderedParticipantsAlongWithContributions(_participants: Tuple[str, str], mObj: Messages) -> Tuple[str, str, int, int]:
             return (*_participants,
-                    *tuple(map(mObj.getPercentageOfContributionByParticipant,
+                    *tuple(map(mObj.getContributionCountByParticipant,
                                _participants)))
 
-        return sorted(map(lambda e: _getOrderedParticipantsAlongWithPercentageOfContributions(
-            _organizeParticipants(e._participants), e),
-            filter(lambda e: e.participantCount == 2, self._inbox)),
+        def _getFirstHalfOfList(l: List[Tuple[str, str, int, int]]) -> List[Tuple[str, str, int, int]]:
+            if not l:
+                return []
+
+            return l[:ceil(len(l) / 2) if x <= ceil(len(l) / 2) else x]
+
+        return sorted(
+            _getFirstHalfOfList(
+                sorted(
+                    map(lambda e: _getOrderedParticipantsAlongWithContributions(
+                        _organizeParticipants(e._participants), e),
+                        filter(lambda e: e.participantCount == 2, self._inbox)),
+                    key=lambda e: e[-1] + e[-2],
+                    reverse=True)),
             key=lambda e: e[-2])[:x]
 
     @ property
