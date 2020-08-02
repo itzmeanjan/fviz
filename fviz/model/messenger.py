@@ -55,12 +55,32 @@ class Messenger:
                                    e.getPercentageOfContributionByParticipant(participant)),
                         filter(lambda e: e.participantCount == 2,
                                self._inbox)),
-                    key=lambda e: e[-1] * e[-2],
+                    key=lambda e: e[-2],
                     reverse=True)[:x],
                 key=lambda e: e[-1],
                 reverse=True)))
 
-    @property
+    def topXPrivateChatsWithLowestContributionFromParticipant(self, x: int, participant: str) -> List[Tuple[str, str, float, float]]:
+        '''
+            Returns a list ( top X ) of private chats where this
+            participant ( yes it's you ) made lowest contribution
+        '''
+
+        def _organizeParticipants(_participants: Tuple[str, str]) -> Tuple[str, str]:
+            return _participants if _participants[0] == participant \
+                else (_participants[1], _participants[0])
+
+        def _getOrderedParticipantsAlongWithPercentageOfContributions(_participants: Tuple[str, str], mObj: Messages) -> Tuple[str, str, float, float]:
+            return (*_participants,
+                    *tuple(map(mObj.getPercentageOfContributionByParticipant,
+                               _participants)))
+
+        return sorted(map(lambda e: _getOrderedParticipantsAlongWithPercentageOfContributions(
+            _organizeParticipants(e._participants), e),
+            filter(lambda e: e.participantCount == 2, self._inbox)),
+            key=lambda e: e[-2])[:x]
+
+    @ property
     def timespan(self) -> Tuple[datetime, datetime]:
         '''
             Life time of whole facebook messenger chat with starting & ending time
@@ -68,7 +88,7 @@ class Messenger:
         _all = list(chain.from_iterable([i.timespan for i in self.inbox]))
         return min(_all), max(_all)
 
-    @property
+    @ property
     def _classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution(self) -> Tuple[List[str], List[List[Dict[str, int]]]]:
         '''
             Classifies all chats in this user's messenger, by their week of occurance
@@ -104,7 +124,7 @@ class Messenger:
 
         return _weeks, _buffer
 
-    @property
+    @ property
     def topChatThreadPerWeek(self) -> List[Tuple[str, Dict[str, int]]]:
         '''
             Top chat thread for each week, along with week identifier
@@ -128,7 +148,7 @@ class Messenger:
                     lambda e: e[1],
                     zip(*self._classifyMessagesByTheirWeekOfOccuranceAndParticipantContribution))))
 
-    @staticmethod
+    @ staticmethod
     def fromJSON(src: List[str]) -> Messenger:
         '''
            Reads each JSON file content concurrently, holding messages
