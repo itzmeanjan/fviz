@@ -66,7 +66,9 @@ All these plots to be generated when you invoke *fviz* with proper params.
 
 - Messages
     - [Top X busiest Facebook Chats](./docs/top15FacebookChatsWithMostMessages.md)
-    - [Top X Private Facebook Chats, where you've shown most interest](./docs/top10PrivateFacebookChatsWithHighestContributionFromYOU.md)
+    - Top Private Facebook Chat Threads
+        - [Top X Private Facebook Chats, where you've shown most interest](./docs/top10PrivateFacebookChatsWithHighestContributionFromYOU.md)
+        - [Top X Private Facebook Chat Threads with lowest contribution from YOU](./docs/top10PrivateFacebookChatThreadsWithLowestContributionFromYOU.md)
     - [Weekly Top Private Facebook Chat Thread for YOU](./docs/weeklyTopPrivateFacebookChatThreadForYou.md)
 
 - Misc
