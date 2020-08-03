@@ -15,6 +15,13 @@ from math import ceil
 
 
 class Messenger:
+    '''
+        This class holds all information related to all
+        chat threads. Each message, with corrresponding particapting parties, along with timestamp
+        is kept here, which can be manipulated to reveal several information related to chatting pattern
+        of this user ( yes this is YOU )
+    '''
+
     def __init__(self, inbox: List[Messages]):
         self._inbox = inbox
 
@@ -82,15 +89,22 @@ class Messenger:
 
             return l[:ceil(len(l) / 2) if x <= ceil(len(l) / 2) else x]
 
-        return sorted(
-            _getFirstHalfOfList(
+        def _calculatePercentageOfParticipation(_tuple: Tuple[str, str, int, int]) -> Tuple[str, str, float, float]:
+            _total = sum(_tuple[2:])
+
+            return (*_tuple[:2], *tuple(map(lambda e: (e / _total) * 100, _tuple[2:])))
+
+        return list(
+            map(_calculatePercentageOfParticipation,
                 sorted(
-                    map(lambda e: _getOrderedParticipantsAlongWithContributions(
-                        _organizeParticipants(e._participants), e),
-                        filter(lambda e: e.participantCount == 2, self._inbox)),
-                    key=lambda e: e[-1] + e[-2],
-                    reverse=True)),
-            key=lambda e: e[-2])[:x]
+                    _getFirstHalfOfList(
+                        sorted(
+                            map(lambda e: _getOrderedParticipantsAlongWithContributions(
+                                _organizeParticipants(e._participants), e),
+                                filter(lambda e: e.participantCount == 2, self._inbox)),
+                            key=lambda e: e[-1] + e[-2],
+                            reverse=True)),
+                    key=lambda e: e[-2])[:x]))
 
     @property
     def timespan(self) -> Tuple[datetime, datetime]:
