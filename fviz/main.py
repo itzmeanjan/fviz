@@ -53,7 +53,7 @@ def _getBanner():
     '''
         Prints banner of scipt
     '''
-    print('\x1b[1;6;36;49m[+]fviz v0.8.0 - Facebook data visualizer\x1b[0m\n\n\t\x1b[3;30;47m$ fviz `path-to-exported-facebook-data.zip` `path-for-zip-extraction`  `path-to-sink-directory`\x1b[0m\n\n[+]Author: Anjan Roy < anjanroy@yandex.com >\n[+]Source: https://github.com/itzmeanjan/fviz ( MIT Licensed )\n')
+    print('\x1b[1;6;36;49m[+]fviz v0.9.0 - Facebook data visualizer\x1b[0m\n\n\t\x1b[3;30;47m$ fviz `path-to-exported-facebook-data.zip` `path-for-zip-extraction`  `path-to-sink-directory`\x1b[0m\n\n[+]Author: Anjan Roy < anjanroy@yandex.com >\n[+]Source: https://github.com/itzmeanjan/fviz ( MIT Licensed )\n')
 
 
 def _getCMD() -> Tuple[str, str, str]:
