@@ -52,6 +52,23 @@ class Comments:
 
         return Counter(buffer).most_common(x)
 
+    @property
+    def peerToCommentCount(self) -> Dict[str, int]:
+        '''
+            Keeps count for which peer ( facebook profile ) is 
+            associated with how many comments.
+        '''
+        _buffer = {}
+
+        for i in self.comments:
+            _peer = i.peer
+            if not _peer:
+                continue
+
+            _buffer[_peer] = _buffer.get(_peer, 0) + 1
+
+        return _buffer
+
     @staticmethod
     def fromJSON(src: str) -> Comments:
         '''
