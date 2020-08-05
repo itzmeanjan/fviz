@@ -4,6 +4,7 @@ from typing import Dict, Tuple, List
 from copy import deepcopy
 from ..model.reactions import Reactions
 from ..model.comments import Comments
+from ..model.messenger import Messenger
 from math import ceil
 from matplotlib import pyplot as plt
 import seaborn as sns
@@ -124,6 +125,24 @@ def plotWeeklyHeatMapWithLikesReactionsComments(reactions: Reactions, comments: 
         return True
     except Exception:
         return False
+
+
+def _mergeAllFacebookPeerActivityCount(reactions: Reactions, comments: Comments, messenger: Messenger, exclude: List[str]) -> Dict[str, int]:
+    '''
+        For each of like, reaction, comment & messaging - facebook activities,
+        we'll accumuate #-of times this account owner has interacted with
+        some other facebook profile & return that as an associative array.
+    '''
+    _buffer = {}
+
+    for i in [reactions.peerToReactionCount, comments.peerToCommentCount, messenger.peerToMessageCount]:
+        for k, v in i.items():
+            if k in exclude:
+                continue
+
+            _buffer[k] = _buffer.get(k, 0) + v
+
+    return _buffer
 
 
 if __name__ == '__main__':
