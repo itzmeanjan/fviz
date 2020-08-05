@@ -8,6 +8,7 @@ from ..model.messenger import Messenger
 from math import ceil
 from matplotlib import pyplot as plt
 import seaborn as sns
+from collections import Counter
 
 
 def _mergeWeeklyFacebookActivites(reactions: Reactions, comments: Comments) -> Dict[str, Dict[str, int]]:
@@ -143,6 +144,13 @@ def _mergeAllFacebookPeerActivityCount(reactions: Reactions, comments: Comments,
             _buffer[k] = _buffer.get(k, 0) + v
 
     return _buffer
+
+
+def topXHighlyInteractedFacebookPeers(reactions: Reactions, comments: Comments, messenger: Messenger, exclude: List[str], x: int) -> List[Tuple[str, int]]:
+    '''
+        Get top X highly interacted facebook profiles, in terms of likes, reactions, comments, chatting
+    '''
+    return Counter(_mergeAllFacebookPeerActivityCount(reactions, comments, messenger, exclude)).most_common(x)
 
 
 if __name__ == '__main__':
