@@ -36,6 +36,21 @@ class Messenger:
     def byIndex(self, _idx: int) -> Messages:
         return self._inbox[_idx] if _idx >= 0 and _idx < self.count else None
 
+    @property
+    def peerToMessageCount(self) -> Dict[str, int]:
+        '''
+            Keeps track of how many meesages sent by each participant in 
+            all of facebook chat threads. Even includes count of messages by
+            this actor, which can be removed in later phase of processing, if required.
+        '''
+        _buffer = {}
+
+        for i in map(lambda e: e.groupByParticipant, self.inbox):
+            for k, v in i.items():
+                _buffer[k] = _buffer.get(k, 0) + v
+
+        return _buffer
+
     def topXBusiestChats(self, x: int = 15) -> List[Tuple[str, int]]:
         '''
             Finds top X number of chats with highest number of messages
