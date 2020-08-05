@@ -47,8 +47,9 @@ class Comments:
         buffer = {}
 
         for i in self.comments:
-            if i.peer:
-                buffer[i.peer] = buffer.get(i.peer, 0) + 1
+            _peer = i.peer
+            if _peer:
+                buffer[_peer] = buffer.get(_peer, 0) + 1
 
         return Counter(buffer).most_common(x)
 
