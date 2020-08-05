@@ -49,6 +49,23 @@ class Reactions:
 
         return buffer
 
+    @property
+    def peerToReactionCount(self) -> Dict[str, int]:
+        '''
+            Returns count of interactions made with each peer
+            which is extracted from like or reaction.
+        '''
+        _buffer = {}
+
+        for i in self.reactions:
+            _peer = i.peer
+            if not _peer:
+                continue
+
+            _buffer[_peer] = _buffer.get(_peer, 0) + 1
+
+        return _buffer
+
     def getTopXPeerToReactionCount(self, x: int) -> Dict[str, int]:
         buffer = self.groupByPeers
 
