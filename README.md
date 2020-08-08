@@ -73,6 +73,7 @@ All these plots to be generated when you invoke *fviz* with proper params.
 
 - Misc
     - [Facebook Activity on each Quarter of Day](./docs/facebookActivityOnEachQuarterOfDay.md)
+    - [Top X mostly interacted with Facebook Profiles](./docs/topXHighlyInteractedFacebookProfiles.md)
 
 
 **This section will keep getting populated !!!**

@@ -146,11 +146,48 @@ def _mergeAllFacebookPeerActivityCount(reactions: Reactions, comments: Comments,
     return _buffer
 
 
-def topXHighlyInteractedFacebookPeers(reactions: Reactions, comments: Comments, messenger: Messenger, exclude: List[str], x: int) -> List[Tuple[str, int]]:
+def _topXHighlyInteractedFacebookPeers(reactions: Reactions, comments: Comments, messenger: Messenger, exclude: List[str], x: int) -> List[Tuple[str, int]]:
     '''
         Get top X highly interacted facebook profiles, in terms of likes, reactions, comments, chatting
     '''
-    return Counter(_mergeAllFacebookPeerActivityCount(reactions, comments, messenger, exclude)).most_common(x)
+    return Counter(_mergeAllFacebookPeerActivityCount(reactions,
+                                                      comments,
+                                                      messenger,
+                                                      exclude)).most_common(x)
+
+
+def plotTopXHighlyInteractedFacebookPeers(reactions: Reactions, comments: Comments, messenger: Messenger, exclude: List[str], x: int, title: str, sink: str) -> bool:
+    '''
+        Given all data extracted from facebook activities of a certain person
+        under inspection ( i.e. whose profile being analysed ), it'll first calculate
+        how many number of times each profile was interacted with ( finally we'll exclude `self` interactions ),
+        which is then used for computing top X most interacted profiles ( may be personal account/ page etc. ),
+        which is plotted in form of a nice bar plot
+    '''
+    if not (reactions and comments and messenger):
+        return False
+
+    try:
+        _data = _topXHighlyInteractedFacebookPeers(reactions, comments,
+                                                   messenger, exclude, x)
+
+        sns.set(style='darkgrid')
+        fig = plt.Figure(figsize=(16, 9), dpi=100)
+
+        sns.barplot(x=list(map(lambda e: e[1], _data)),
+                    y=list(map(lambda e: e[0], _data)),
+                    orient='h', ax=fig.gca(), palette='Blues_d')
+
+        fig.gca().set_xlabel('#-of times interacted with')
+        fig.gca().set_ylabel('Facebook Profiles')
+        fig.gca().set_title(title)
+
+        fig.savefig(sink, bbox_inches='tight', pad_inches=.5)
+        plt.close(fig)
+
+        return True
+    except Exception:
+        return False
 
 
 if __name__ == '__main__':

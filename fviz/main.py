@@ -20,7 +20,10 @@ from .model.friends import Friends
 from .plot.friends import plotMonthlyFriendsCreated
 from .model.comments import Comments
 from .plot.comments import plotTopXPeersWithMostCommentedPostsByUser
-from .plot.extra import plotWeeklyHeatMapWithLikesReactionsComments
+from .plot.extra import (
+    plotWeeklyHeatMapWithLikesReactionsComments,
+    plotTopXHighlyInteractedFacebookPeers
+)
 from time import time
 from .messagePaths import getMessageFilePaths
 from .model.messenger import Messenger
@@ -253,7 +256,16 @@ def main():
                 join(
                     sink,
                     'weeklyTopPrivateFacebookChatThreadFor{}.svg'.format(
-                        _splitAndJoinActorName(reactions.reactions[0].actor))))
+                        _splitAndJoinActorName(reactions.reactions[0].actor)))),
+            plotTopXHighlyInteractedFacebookPeers(
+                reactions, comments, messenger,
+                [reactions.reactions[0].actor, 'self'], 10,
+                'Top 10 Highly Interacted with Facebook Profiles for {} [ {} - {} ]'
+                .format(reactions.reactions[0].actor,
+                        *[i.strftime('%d %b, %Y') for i in reactions.getTimeFrame]),
+                join(sink,
+                     'topXHighlyInteractedFacebookProfilesFor{}.svg'.format(
+                         _splitAndJoinActorName(reactions.reactions[0].actor))))
         ]
         print('[+]Completed in \x1b[1;6;35;48m{} s\x1b[0m with \x1b[1;6;35;48m{}%\x1b[0m success'.format(
             time() - _starTm,
