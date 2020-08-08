@@ -265,8 +265,7 @@ def main():
                         *[i.strftime('%d %b, %Y') for i in reactions.getTimeFrame]),
                 join(sink,
                      'topXHighlyInteractedFacebookProfilesFor{}.svg'.format(
-                         _splitAndJoinActorName(reactions.reactions[0].actor)))
-            )
+                         _splitAndJoinActorName(reactions.reactions[0].actor))))
         ]
         print('[+]Completed in \x1b[1;6;35;48m{} s\x1b[0m with \x1b[1;6;35;48m{}%\x1b[0m success'.format(
             time() - _starTm,

@@ -179,7 +179,7 @@ def plotTopXHighlyInteractedFacebookPeers(reactions: Reactions, comments: Commen
                     orient='h', ax=fig.gca(), palette='Blues_d')
 
         fig.gca().set_xlabel('#-of times interacted with')
-        fig.gca().set_ylabel('Facebook Peers')
+        fig.gca().set_ylabel('Facebook Profiles')
         fig.gca().set_title(title)
 
         fig.savefig(sink, bbox_inches='tight', pad_inches=.5)
